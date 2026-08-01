@@ -9,10 +9,9 @@
 <style>
   :root{
     --ink:#0B0F14;
-    --teal:#0FB5A6;
-    --teal-dark:#0B8F84;
-    --teal-glow:rgba(15,181,166,.14);
-    --brand-yellow:#F5C21B;
+    --gold:#F5B700;
+    --gold-dark:#8A6100;
+    --gold-glow:rgba(245,183,0,.14);
     --alert:#E8590C;
     --bg:#F6F7F9;
     --white:#FFFFFF;
@@ -53,13 +52,13 @@
   .logo-img{ height:40px; width:auto; flex:none; cursor:pointer; }
   nav.dnav{ display:flex; gap:28px; flex:1; }
   nav.dnav button{ font-family:'Space Grotesk'; font-weight:600; font-size:14px; padding:8px 2px; border-bottom:2px solid transparent; color:var(--text); }
-  nav.dnav button:hover{ border-color:var(--teal); color:var(--teal-dark); }
+  nav.dnav button:hover{ border-color:var(--gold); color:var(--gold-dark); }
   .hdr-search{ display:flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:9px 14px; width:220px; color:var(--muted); }
   .hdr-search input{ border:none; background:none; outline:none; font-size:13px; width:100%; color:var(--text); }
   .icon-btn{ width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text); transition:background .15s; flex:none; }
   .icon-btn:hover{ background:var(--bg); }
   .cart-pill{ display:flex; align-items:center; gap:8px; background:var(--ink); color:#fff; padding:10px 16px; border-radius:10px; font-family:'Space Grotesk'; font-size:13px; font-weight:600; }
-  .cart-pill .cc{ background:var(--teal); color:#04211E; font-size:11px; font-weight:700; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .cart-pill .cc{ background:var(--gold); color:var(--ink); font-size:11px; font-weight:700; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   @media(max-width:900px){ header.desktop-header, .topline{ display:none; } }
 
   /* ================= MOBILE APP BAR ================= */
@@ -73,14 +72,14 @@
   header.app-bar .logo-img{ height:28px; }
   header.app-bar .ab-actions{ display:flex; align-items:center; gap:6px; }
   .ab-icon{ position:relative; }
-  .ab-badge{ position:absolute; top:1px; right:1px; background:var(--teal); color:#04211E; font-size:9px; font-weight:800; min-width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .ab-badge{ position:absolute; top:1px; right:1px; background:var(--gold); color:var(--ink); font-size:9px; font-weight:800; min-width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   .install-banner{
     display:none; background:var(--ink); color:#fff; font-size:11.5px; padding:9px 16px;
     align-items:center; justify-content:space-between; gap:10px;
   }
   .install-banner .ib-left{ display:flex; align-items:center; gap:8px; }
-  .install-banner b{ color:var(--brand-yellow); }
-  .install-banner button{ background:var(--teal); color:#04211E; font-weight:700; font-size:11px; padding:5px 10px; border-radius:6px; }
+  .install-banner b{ color:var(--gold); }
+  .install-banner button{ background:var(--gold); color:var(--ink); font-weight:700; font-size:11px; padding:5px 10px; border-radius:6px; }
   @media(max-width:900px){ header.app-bar{ display:flex; } .install-banner{ display:flex; } }
 
   /* ================= BOTTOM TAB BAR ================= */
@@ -92,14 +91,14 @@
   }
   .tab-btn{ display:flex; flex-direction:column; align-items:center; gap:3px; color:#7C8896; font-size:10.5px; font-weight:600; padding:4px 10px; border-radius:10px; position:relative; }
   .tab-btn .icon{ color:inherit; }
-  .tab-btn.active{ color:var(--teal); }
+  .tab-btn.active{ color:var(--gold); }
   .tab-btn .tbadge{ position:absolute; top:-2px; right:2px; background:var(--alert); color:#fff; font-size:9px; font-weight:800; min-width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
   @media(max-width:900px){ .tabbar{ display:flex; } body{ padding-bottom:76px; } }
 
   /* ================= BUTTONS ================= */
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 22px; border-radius:10px; font-family:'Space Grotesk'; font-weight:600; font-size:14px; transition:transform .12s, box-shadow .15s; }
-  .btn-teal{ background:var(--teal); color:#04211E; }
-  .btn-teal:hover{ box-shadow:0 8px 20px var(--teal-glow); transform:translateY(-1px); }
+  .btn-teal{ background:var(--gold); color:var(--ink); }
+  .btn-teal:hover{ box-shadow:0 8px 20px var(--gold-glow); transform:translateY(-1px); }
   .btn-ghost{ border:1.5px solid var(--line); color:var(--text); }
   .btn-dark{ background:var(--ink); color:#fff; }
   .btn-outline{ border:1.5px solid var(--line); color:var(--text); background:var(--white); }
@@ -109,34 +108,34 @@
   .shell{ max-width:1320px; margin:0 auto; padding:0 28px; }
   @media(max-width:900px){ .shell{ padding:0 16px; } }
   .breadcrumb{ font-size:12px; color:var(--muted); padding:16px 28px 0; max-width:1320px; margin:0 auto; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-  .breadcrumb a:hover{ color:var(--teal-dark); }
+  .breadcrumb a:hover{ color:var(--gold-dark); }
   @media(max-width:900px){ .breadcrumb{ padding:14px 16px 0; } }
 
   /* ================= HERO ================= */
   .hero{
     background-color:var(--white);
     background-image:
-      linear-gradient(rgba(15,181,166,.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,181,166,.07) 1px, transparent 1px);
+      linear-gradient(rgba(245,183,0,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,183,0,.07) 1px, transparent 1px);
     background-size:34px 34px;
     border-bottom:1px solid var(--line);
   }
   .hero-inner{ max-width:1320px; margin:0 auto; padding:60px 28px; display:grid; grid-template-columns:1.05fr 0.95fr; gap:44px; align-items:center; }
   .hero-inner h1{ font-size:42px; line-height:1.1; font-weight:700; margin-bottom:16px; color:var(--text); }
-  .hero-inner h1 span{ color:var(--teal-dark); }
+  .hero-inner h1 span{ color:var(--gold-dark); }
   .hero-inner p{ font-size:15.5px; color:var(--muted); max-width:460px; line-height:1.65; margin-bottom:28px; }
   .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:34px; }
 
   .dash-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:460px; }
   .dash-card{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:14px; box-shadow:0 8px 20px rgba(11,15,20,.04); }
-  .dash-card .dv{ font-family:'IBM Plex Mono'; font-size:19px; font-weight:600; color:var(--teal-dark); }
+  .dash-card .dv{ font-family:'IBM Plex Mono'; font-size:19px; font-weight:600; color:var(--gold-dark); }
   .dash-card .dl{ font-size:10px; color:var(--muted); margin-top:4px; line-height:1.3; }
 
   .hero-visual{ position:relative; background:var(--white); border:1px solid var(--line); border-radius:20px; padding:24px; box-shadow:0 20px 50px rgba(11,15,20,.06); }
   .hero-visual img{ width:100%; border-radius:12px; }
-  .hv-tag{ position:absolute; top:38px; right:38px; background:var(--brand-yellow); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:8px; display:flex; align-items:center; gap:6px; }
+  .hv-tag{ position:absolute; top:38px; right:38px; background:var(--gold); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:8px; display:flex; align-items:center; gap:6px; }
   .hv-float{ position:absolute; bottom:-16px; left:38px; background:var(--white); border:1px solid var(--line); color:var(--text); padding:10px 16px; border-radius:10px; font-size:12.5px; box-shadow:0 16px 30px rgba(0,0,0,.14); display:flex; gap:8px; align-items:center; }
-  .hv-float b{ font-family:'IBM Plex Mono'; color:var(--teal-dark); font-size:15px; }
+  .hv-float b{ font-family:'IBM Plex Mono'; color:var(--gold-dark); font-size:15px; }
   @media(max-width:900px){ .hero-inner{ grid-template-columns:1fr; padding:36px 16px 44px; } .hero-inner h1{ font-size:29px; } .dash-grid{ max-width:100%; } }
 
   /* ================= SECTIONS ================= */
@@ -144,47 +143,55 @@
   @media(max-width:900px){ section{ padding:36px 16px; } }
   .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap; gap:10px; }
   .sec-head h2{ font-size:23px; font-weight:700; }
-  .sec-head .eyebrow{ font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; color:var(--teal-dark); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
-  .see-all{ font-size:13px; font-weight:700; color:var(--teal-dark); cursor:pointer; }
+  .sec-head .eyebrow{ font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; color:var(--gold-dark); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  .see-all{ font-size:13px; font-weight:700; color:var(--gold-dark); cursor:pointer; }
 
   /* ================= BENTO CATEGORY GRID ================= */
   .bento{ display:grid; grid-template-columns:1.4fr 1fr 1fr; grid-template-rows:auto auto; gap:16px; }
   .bento-card{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:26px; cursor:pointer; transition:transform .15s, box-shadow .15s; position:relative; overflow:hidden; color:var(--text); }
   .bento-card:hover{ transform:translateY(-3px); box-shadow:0 16px 32px rgba(11,15,20,.08); }
-  .bento-card.lg{ grid-row:span 2; display:flex; flex-direction:column; justify-content:flex-end; min-height:280px; background:linear-gradient(160deg,var(--ink),#1D2933); color:#fff; border-top:3px solid var(--brand-yellow); }
+  .bento-card.lg{ grid-row:span 2; display:flex; flex-direction:column; justify-content:flex-end; min-height:280px; background:linear-gradient(160deg,var(--ink),#1D2933); color:#fff; border-top:3px solid var(--gold); }
   .bento-card.lg .bc-icon{ position:absolute; top:22px; right:22px; opacity:.18; width:64px; height:64px; }
   .bento-card h3{ font-size:16px; font-weight:700; margin-bottom:5px; }
   .bento-card p{ font-size:12.5px; color:var(--muted); }
   .bento-card.lg p{ color:#B7C0CC; }
-  .bento-card .bc-icon-sm{ margin-bottom:12px; color:var(--teal-dark); }
+  .bento-card .bc-icon-sm{ margin-bottom:12px; color:var(--gold-dark); }
   .bento-card .bc-icon-sm.yellow{ color:#8A6800; }
-  .bento-card .bc-tag{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--teal); margin-top:10px; display:inline-block; }
+  .bento-card .bc-tag{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--gold); margin-top:10px; display:inline-block; }
   @media(max-width:900px){ .bento{ grid-template-columns:1fr 1fr; } .bento-card.lg{ grid-column:span 2; grid-row:span 1; min-height:170px; } }
 
   /* ================= TRUST STRIP ================= */
   .trust-strip{ background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
   .trust-row{ max-width:1320px; margin:0 auto; padding:26px 28px; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
   .trust-card{ display:flex; gap:12px; align-items:flex-start; }
-  .trust-card .ic{ width:36px; height:36px; border-radius:10px; background:var(--teal-glow); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; flex:none; }
+  .trust-card .ic{ width:36px; height:36px; border-radius:10px; background:var(--gold-glow); color:var(--gold-dark); display:flex; align-items:center; justify-content:center; flex:none; }
   .trust-card .ic.yellow{ background:rgba(245,194,27,.22); color:#8A6800; }
   .trust-card h4{ font-size:13px; margin-bottom:2px; font-family:'Space Grotesk'; }
   .trust-card p{ font-size:11.5px; color:var(--muted); }
   @media(max-width:900px){ .trust-row{ grid-template-columns:repeat(2,1fr); padding:20px 16px; } }
 
   /* ================= BRAND STRIPE BANNER ================= */
-  .brand-stripe{ background:var(--brand-yellow); color:var(--ink); padding:10px 28px; overflow:hidden; }
+  .brand-stripe{ background:var(--gold); color:var(--ink); padding:10px 28px; overflow:hidden; }
   .brand-stripe-inner{ max-width:1320px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:600; letter-spacing:.04em; text-align:center; }
   .brand-stripe-inner .dot{ opacity:.5; }
 
   /* ================= PHOTO BANNER ================= */
   .photo-band{ position:relative; border-radius:var(--radius); overflow:hidden; min-height:380px; display:flex; align-items:flex-end; border:1px solid var(--line); }
   .photo-band img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
-  .photo-band::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(11,15,20,.92) 0%, rgba(11,15,20,.55) 45%, rgba(11,15,20,.08) 100%); }
-  .photo-band .pb-content{ position:relative; padding:38px; color:#fff; max-width:560px; }
-  .photo-band .pb-badge{ display:inline-flex; align-items:center; gap:7px; background:var(--brand-yellow); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11px; font-weight:700; padding:6px 12px; border-radius:7px; margin-bottom:14px; }
-  .photo-band h2{ font-size:26px; margin-bottom:10px; color:#fff; }
-  .photo-band p{ font-size:14px; color:#DCE1E6; line-height:1.6; margin-bottom:20px; max-width:460px; }
-  @media(max-width:700px){ .photo-band{ min-height:320px; } .photo-band .pb-content{ padding:24px; } .photo-band h2{ font-size:21px; } }
+  .photo-band::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(11,15,20,.55) 0%, rgba(11,15,20,.1) 55%, rgba(11,15,20,0) 100%); }
+  .photo-band .pb-content{ position:relative; margin:22px; padding:26px 28px; color:#fff; max-width:480px; background:rgba(11,15,20,.82); backdrop-filter:blur(6px); border-radius:12px; border:1px solid rgba(255,255,255,.08); }
+  .photo-band .pb-badge{ display:inline-flex; align-items:center; gap:7px; background:var(--gold); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11px; font-weight:700; padding:6px 12px; border-radius:7px; margin-bottom:14px; }
+  .photo-band h2{ font-size:24px; margin-bottom:10px; color:#fff; }
+  .photo-band p{ font-size:13.5px; color:#DCE1E6; line-height:1.6; margin-bottom:20px; max-width:460px; }
+  @media(max-width:700px){ .photo-band{ min-height:340px; } .photo-band .pb-content{ margin:14px; padding:20px; } .photo-band h2{ font-size:20px; } }
+
+  /* ================= PHOTO CATEGORY TILE ================= */
+  .bento-card.photo{ position:relative; overflow:hidden; padding:0; color:#fff; display:flex; align-items:flex-end; }
+  .bento-card.photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .bento-card.photo::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(11,15,20,.88) 0%, rgba(11,15,20,.25) 60%, rgba(11,15,20,.05) 100%); }
+  .bento-card.photo .pc-content{ position:relative; padding:20px; }
+  .bento-card.photo h3{ color:#fff; }
+  .bento-card.photo p{ color:#D6DBE0; }
 
   /* ================= PRODUCT CARD ================= */
   .prod-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
@@ -196,18 +203,18 @@
   .badge{ position:absolute; top:10px; left:10px; font-family:'IBM Plex Mono'; font-size:10px; font-weight:700; padding:4px 9px; border-radius:6px; }
   .badge.bestseller{ background:var(--ink); color:#fff; }
   .badge.deal{ background:var(--alert); color:#fff; }
-  .rating-chip{ position:absolute; top:10px; right:10px; background:var(--teal-glow); color:var(--teal-dark); font-family:'IBM Plex Mono'; font-size:10.5px; font-weight:700; padding:4px 8px; border-radius:6px; display:flex; align-items:center; gap:4px; }
+  .rating-chip{ position:absolute; top:10px; right:10px; background:var(--gold-glow); color:var(--gold-dark); font-family:'IBM Plex Mono'; font-size:10.5px; font-weight:700; padding:4px 8px; border-radius:6px; display:flex; align-items:center; gap:4px; }
   .prod-body{ padding:14px 15px 16px; display:flex; flex-direction:column; gap:6px; flex:1; border-top:1px solid var(--line); }
   .prod-cat{ font-family:'IBM Plex Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
   .prod-name{ font-size:13.5px; font-weight:600; line-height:1.35; min-height:36px; color:var(--text); }
   .price-row{ display:flex; align-items:baseline; gap:8px; margin-top:2px; }
-  .price-now{ font-family:'IBM Plex Mono'; font-weight:700; font-size:17px; color:var(--teal-dark); }
+  .price-now{ font-family:'IBM Plex Mono'; font-weight:700; font-size:17px; color:var(--gold-dark); }
   .price-was{ font-size:12px; color:var(--muted); text-decoration:line-through; }
   .price-off{ font-size:11px; color:var(--alert); font-weight:700; }
   .prod-footer{ margin-top:auto; padding-top:8px; display:flex; align-items:center; justify-content:space-between; }
   .add-circle{ width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; transition:background .15s; flex:none; }
-  .add-circle:hover{ background:var(--teal); color:#04211E; }
-  .add-circle.added{ background:var(--teal); color:#04211E; }
+  .add-circle:hover{ background:var(--gold); color:var(--ink); }
+  .add-circle.added{ background:var(--gold); color:var(--ink); }
   .ship-note{ font-size:10.5px; color:var(--muted); }
 
   /* ================= BRANDS ================= */
@@ -224,7 +231,7 @@
   .filters h4{ font-family:'Space Grotesk'; font-size:13px; margin-bottom:12px; }
   .filters .fgroup{ margin-bottom:20px; }
   .filters .fgroup label{ display:flex; align-items:center; gap:8px; font-size:13px; padding:5px 0; cursor:pointer; }
-  .filters .fgroup label:hover{ color:var(--teal-dark); }
+  .filters .fgroup label:hover{ color:var(--gold-dark); }
   .shop-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
   .shop-toolbar h2{ font-size:20px; font-weight:700; }
   .shop-toolbar select{ border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px; background:var(--white); color:var(--text); }
@@ -241,17 +248,17 @@
   .pd-info h1{ font-size:22px; font-weight:700; margin-bottom:8px; line-height:1.3; }
   .pd-info .rating-chip{ position:static; display:inline-flex; margin-bottom:14px; }
   .pd-info .pd-price-row{ display:flex; align-items:baseline; gap:10px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:16px; }
-  .pd-info .pd-price-now{ font-family:'IBM Plex Mono'; font-size:26px; font-weight:700; color:var(--teal-dark); }
+  .pd-info .pd-price-now{ font-family:'IBM Plex Mono'; font-size:26px; font-weight:700; color:var(--gold-dark); }
   .spec-table{ width:100%; border-collapse:collapse; margin-bottom:20px; }
   .spec-table tr{ border-bottom:1px solid var(--line); }
   .spec-table td{ padding:9px 0; font-size:12.5px; }
   .spec-table td:first-child{ color:var(--muted); font-family:'IBM Plex Mono'; width:40%; }
   .buybox{ background:var(--ink); color:#fff; border-radius:var(--radius); padding:22px; position:sticky; top:90px; }
   @media(max-width:1000px){ .buybox{ position:static; } }
-  .buybox .bb-price{ font-family:'IBM Plex Mono'; font-size:24px; font-weight:700; color:var(--teal); margin-bottom:6px; }
-  .buybox .bb-stock{ color:var(--teal); font-weight:600; font-size:12.5px; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
-  .buybox .bb-stock .pulse{ width:6px; height:6px; border-radius:50%; background:var(--teal); animation:pulse 2s infinite; }
-  @keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(15,181,166,.5);} 70%{box-shadow:0 0 0 8px rgba(15,181,166,0);} 100%{box-shadow:0 0 0 0 rgba(15,181,166,0);} }
+  .buybox .bb-price{ font-family:'IBM Plex Mono'; font-size:24px; font-weight:700; color:var(--gold); margin-bottom:6px; }
+  .buybox .bb-stock{ color:var(--gold); font-weight:600; font-size:12.5px; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+  .buybox .bb-stock .pulse{ width:6px; height:6px; border-radius:50%; background:var(--gold); animation:pulse 2s infinite; }
+  @keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(245,183,0,.5);} 70%{box-shadow:0 0 0 8px rgba(245,183,0,0);} 100%{box-shadow:0 0 0 0 rgba(245,183,0,0);} }
   .buybox .bb-ship{ font-size:12px; color:#8B96A3; margin-bottom:16px; line-height:1.6; }
   .qty-row{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
   .qty-stepper{ display:flex; align-items:center; border:1px solid rgba(255,255,255,.2); border-radius:8px; }
@@ -284,18 +291,18 @@
   .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:20px 22px; }
   .form-grid label{ display:flex; flex-direction:column; gap:6px; font-size:12.5px; color:var(--muted); }
   .form-grid input{ border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:13.5px; background:var(--bg); color:var(--text); outline:none; }
-  .form-grid input:focus{ border-color:var(--teal); }
+  .form-grid input:focus{ border-color:var(--gold); }
   .form-grid label.full{ grid-column:1 / -1; }
   .pay-options{ padding:6px 22px 22px; display:flex; flex-direction:column; gap:10px; }
   .pay-card{ display:flex; align-items:center; gap:12px; border:1.5px solid var(--line); border-radius:10px; padding:13px 14px; font-size:13.5px; cursor:pointer; transition:border-color .15s; }
-  .pay-card:has(input:checked){ border-color:var(--teal); background:var(--teal-glow); }
-  .pay-card input{ accent-color:var(--teal); }
+  .pay-card:has(input:checked){ border-color:var(--gold); background:var(--gold-glow); }
+  .pay-card input{ accent-color:var(--gold); }
 
   /* ================= SUCCESS VIEW ================= */
   .success-wrap{ max-width:520px; margin:0 auto; padding:90px 28px; text-align:center; }
-  .success-icon{ width:76px; height:76px; border-radius:50%; background:var(--teal-glow); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
+  .success-icon{ width:76px; height:76px; border-radius:50%; background:var(--gold-glow); color:var(--gold-dark); display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
   .success-wrap h1{ font-size:26px; margin-bottom:10px; }
-  .order-id{ font-family:'IBM Plex Mono'; font-size:14px; color:var(--teal-dark); font-weight:600; margin-bottom:18px; }
+  .order-id{ font-family:'IBM Plex Mono'; font-size:14px; color:var(--gold-dark); font-weight:600; margin-bottom:18px; }
   .success-wrap p{ color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:28px; }
 
   /* ================= FOOTER ================= */
@@ -305,7 +312,7 @@
   .footer-grid{ max-width:1320px; margin:0 auto; padding:50px 28px 26px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; }
   .footer-grid h4{ color:#fff; font-size:13px; margin-bottom:14px; font-family:'Space Grotesk'; }
   .footer-grid p, .footer-grid a{ font-size:12.5px; line-height:2.1; }
-  .footer-grid a:hover{ color:var(--teal); }
+  .footer-grid a:hover{ color:var(--gold); }
   .footer-bottom{ border-top:1px solid rgba(255,255,255,.08); padding:16px 28px; max-width:1320px; margin:0 auto; display:flex; justify-content:space-between; font-size:11.5px; flex-wrap:wrap; gap:10px; }
   @media(max-width:900px){ .footer-grid{ grid-template-columns:1fr 1fr; padding:36px 16px 20px; } footer{ display:none; } }
 
@@ -315,7 +322,7 @@
     transform:translateY(20px); opacity:0; pointer-events:none; transition:.25s; z-index:200;
   }
   .toast.show{ transform:translateY(0); opacity:1; }
-  .toast .tick{ background:var(--teal); color:#04211E; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex:none; }
+  .toast .tick{ background:var(--gold); color:var(--ink); border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex:none; }
   @media(max-width:900px){ .toast{ bottom:calc(env(safe-area-inset-bottom) + 88px); right:16px; left:16px; } }
 </style>
 </head>
@@ -413,11 +420,11 @@
 
   <section style="padding-bottom:0;">
     <div class="photo-band">
-      <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/DSC1001_11zon-scaled.webp" alt="Trabajadores con equipo de seguridad Galusa Import en obra">
+      <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/DSC1001_11zon-scaled.webp" alt="Línea de chalecos reflectivos Galusa Import">
       <div class="pb-content">
-        <span class="pb-badge"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg> EQUIPO PROBADO EN TERRENO</span>
-        <h2>Nuestros equipos, puestos a prueba en obra real</h2>
-        <p>Desde chalecos reflectivos hasta botas industriales: cada producto que distribuimos está pensado para el trabajador dominicano, no para una vitrina.</p>
+        <span class="pb-badge"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg> COLECCIÓN DISPONIBLE</span>
+        <h2>Chalecos reflectivos para cada turno de trabajo</h2>
+        <p>Distintos colores y niveles de visibilidad, con cinta reflectiva certificada. Listos para despacho inmediato en Santo Domingo.</p>
         <a class="btn btn-teal" onclick="showView('shop','Reflectivos')">Ver ropa reflectiva</a>
       </div>
     </div>
@@ -426,19 +433,23 @@
   <section>
     <div class="sec-head"><div><div class="eyebrow">EXPLORA POR NECESIDAD</div><h2>Comprar por categoría</h2></div></div>
     <div class="bento">
-      <div class="bento-card lg" onclick="showView('shop','Calzado')">
-        <svg class="bc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v9.5c0 .8.5 1.3 1 1.7l3 2c.6.4 1 .9 1 1.8v1h10a2 2 0 0 0-1-1.7l-4-2.5V3z"/><path d="M6 3h6"/></svg>
-        <h3>Calzado de seguridad</h3>
-        <p>Botas dieléctricas, punta de acero e industriales para todo tipo de terreno.</p>
-        <span class="bc-tag">→ 4 líneas disponibles</span>
+      <div class="bento-card lg photo" onclick="showView('shop','Calzado')">
+        <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/2.-Slider-seccion-productos-destacados.jpg" alt="Botas de seguridad Galusa Import">
+        <div class="pc-content">
+          <h3>Calzado de seguridad</h3>
+          <p>Botas dieléctricas, punta de acero e industriales para todo tipo de terreno.</p>
+          <span class="bc-tag">→ 4 líneas disponibles</span>
+        </div>
       </div>
       <div class="bento-card" onclick="showView('shop','Reflectivos')">
         <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3 6 5v16h5v-8h2v8h5V5l-3-2-3 2-3-2Z"/></svg>
         <h3>Ropa reflectiva</h3><p>Chalecos y polos alta visibilidad</p>
       </div>
-      <div class="bento-card" onclick="showView('shop','Vial')">
-        <svg class="icon-lg bc-icon-sm yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 20h16Z"/><path d="M8 13h8M6.5 16.5h11"/></svg>
-        <h3>Seguridad vial</h3><p>Conos, boyas y barreras</p>
+      <div class="bento-card photo" onclick="showView('shop','Vial')" style="min-height:170px;">
+        <img src="https://galusasrl.com.do/wp-content/uploads/2022/06/Pesados-55-web.jpeg" alt="Seguridad vial Galusa Import">
+        <div class="pc-content">
+          <h3>Seguridad vial</h3><p>Conos, boyas y barreras</p>
+        </div>
       </div>
       <div class="bento-card" onclick="showView('shop','Protección personal')">
         <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5a1.5 1.5 0 0 1 3 0v8M17 12v-4a1.5 1.5 0 0 1 3 0v7c0 3.3-2.7 6-6 6h-2c-3 0-4.5-1.5-6-4l-2-4a1.4 1.4 0 0 1 2.4-1.4L8 13"/></svg>
@@ -589,9 +600,9 @@
         </p>
       </div>
       <div class="photo-band" style="min-height:260px;">
-        <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/DSC1001_11zon-scaled.webp" alt="Trabajadores con equipo de seguridad Galusa Import">
-        <div class="pb-content" style="padding:22px;">
-          <span class="pb-badge">EN TERRENO</span>
+        <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/DSC1001_11zon-scaled.webp" alt="Línea de chalecos reflectivos Galusa Import">
+        <div class="pb-content" style="margin:16px; padding:16px 18px;">
+          <span class="pb-badge" style="margin-bottom:0;">NUESTRO CATÁLOGO</span>
         </div>
       </div>
     </div>
@@ -828,7 +839,7 @@ function openProduct(id){
       <h1>${p.name}</h1>
       <span class="rating-chip">${STAR}${p.rating} verificado</span>
       <div class="pd-price-row"><span class="pd-price-now">${money(p.price)}</span>${p.was ? `<span class="price-was">${money(p.was)}</span><span class="price-off">-${Math.round((1-p.price/p.was)*100)}%</span>` : ''}</div>
-      <ul style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px;list-style:none;">${p.bullets.map(b=>`<li style="font-size:13.5px;display:flex;gap:8px;line-height:1.5;"><svg class="icon-sm" style="color:var(--teal-dark);flex:none;margin-top:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>${b}</li>`).join('')}</ul>
+      <ul style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px;list-style:none;">${p.bullets.map(b=>`<li style="font-size:13.5px;display:flex;gap:8px;line-height:1.5;"><svg class="icon-sm" style="color:var(--gold-dark);flex:none;margin-top:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>${b}</li>`).join('')}</ul>
       <table class="spec-table">${specsHtml}</table>
     </div>
     <div class="buybox">

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Galusa Import — Seguridad Industrial y Vial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0F14;
+    --teal:#0FB5A6;
+    --teal-dark:#0B8F84;
+    --teal-glow:rgba(15,181,166,.14);
+    --brand-yellow:#F5C21B;
+    --alert:#E8590C;
+    --bg:#F6F7F9;
+    --white:#FFFFFF;
+    --text:#0B0F14;
+    --muted:#5B6472;
+    --line:#E4E7EC;
+    --radius:14px;
+  }
+  html[data-theme="dark"]{
+    --bg:#0B0F14;
+    --white:#151D26;
+    --text:#F2F4F6;
+    --muted:#93A0AC;
+    --line:#26313C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; transition:background .2s, color .2s; }
+  h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+  button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+  ul{ list-style:none; }
+  input{ font-family:inherit; }
+  .icon{ width:18px; height:18px; flex:none; }
+  .icon-sm{ width:14px; height:14px; }
+  .icon-lg{ width:40px; height:40px; }
+  .view{ display:none; opacity:0; transform:translateY(6px); }
+  .view.active{ display:block; opacity:1; transform:translateY(0); transition:opacity .28s ease, transform .28s ease; }
+  @media (prefers-reduced-motion:reduce){ .view{ transition:none !important; transform:none !important; } }
+
+  /* ================= DESKTOP HEADER ================= */
+  .topline{ background:var(--ink); color:#8B96A3; font-size:12px; display:flex; justify-content:space-between; padding:7px 28px; }
+  .topline a{ color:#E4E7EC; }
+  header.desktop-header{ background:var(--white); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:60; }
+  .hdr-row{ max-width:1320px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:26px; }
+  .logo-img{ height:40px; width:auto; flex:none; cursor:pointer; }
+  nav.dnav{ display:flex; gap:28px; flex:1; }
+  nav.dnav button{ font-family:'Space Grotesk'; font-weight:600; font-size:14px; padding:8px 2px; border-bottom:2px solid transparent; color:var(--text); }
+  nav.dnav button:hover{ border-color:var(--teal); color:var(--teal-dark); }
+  .hdr-search{ display:flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:9px 14px; width:220px; color:var(--muted); }
+  .hdr-search input{ border:none; background:none; outline:none; font-size:13px; width:100%; color:var(--text); }
+  .icon-btn{ width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; color:var(--text); transition:background .15s; flex:none; }
+  .icon-btn:hover{ background:var(--bg); }
+  .cart-pill{ display:flex; align-items:center; gap:8px; background:var(--ink); color:#fff; padding:10px 16px; border-radius:10px; font-family:'Space Grotesk'; font-size:13px; font-weight:600; }
+  .cart-pill .cc{ background:var(--teal); color:#04211E; font-size:11px; font-weight:700; min-width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  @media(max-width:900px){ header.desktop-header, .topline{ display:none; } }
+
+  /* ================= MOBILE APP BAR ================= */
+  header.app-bar{
+    display:none; position:sticky; top:0; z-index:60;
+    background:color-mix(in srgb, var(--white) 88%, transparent);
+    backdrop-filter:blur(14px); border-bottom:1px solid var(--line);
+    padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;
+    align-items:center; justify-content:space-between;
+  }
+  header.app-bar .logo-img{ height:28px; }
+  header.app-bar .ab-actions{ display:flex; align-items:center; gap:6px; }
+  .ab-icon{ position:relative; }
+  .ab-badge{ position:absolute; top:1px; right:1px; background:var(--teal); color:#04211E; font-size:9px; font-weight:800; min-width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .install-banner{
+    display:none; background:var(--ink); color:#fff; font-size:11.5px; padding:9px 16px;
+    align-items:center; justify-content:space-between; gap:10px;
+  }
+  .install-banner .ib-left{ display:flex; align-items:center; gap:8px; }
+  .install-banner b{ color:var(--brand-yellow); }
+  .install-banner button{ background:var(--teal); color:#04211E; font-weight:700; font-size:11px; padding:5px 10px; border-radius:6px; }
+  @media(max-width:900px){ header.app-bar{ display:flex; } .install-banner{ display:flex; } }
+
+  /* ================= BOTTOM TAB BAR ================= */
+  .tabbar{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:70;
+    background:rgba(11,15,20,.94); backdrop-filter:blur(16px);
+    padding:8px 6px calc(env(safe-area-inset-bottom) + 8px);
+    justify-content:space-around; border-top:1px solid rgba(255,255,255,.06);
+  }
+  .tab-btn{ display:flex; flex-direction:column; align-items:center; gap:3px; color:#7C8896; font-size:10.5px; font-weight:600; padding:4px 10px; border-radius:10px; position:relative; }
+  .tab-btn .icon{ color:inherit; }
+  .tab-btn.active{ color:var(--teal); }
+  .tab-btn .tbadge{ position:absolute; top:-2px; right:2px; background:var(--alert); color:#fff; font-size:9px; font-weight:800; min-width:14px; height:14px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  @media(max-width:900px){ .tabbar{ display:flex; } body{ padding-bottom:76px; } }
+
+  /* ================= BUTTONS ================= */
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 22px; border-radius:10px; font-family:'Space Grotesk'; font-weight:600; font-size:14px; transition:transform .12s, box-shadow .15s; }
+  .btn-teal{ background:var(--teal); color:#04211E; }
+  .btn-teal:hover{ box-shadow:0 8px 20px var(--teal-glow); transform:translateY(-1px); }
+  .btn-ghost{ border:1.5px solid var(--line); color:var(--text); }
+  .btn-dark{ background:var(--ink); color:#fff; }
+  .btn-outline{ border:1.5px solid var(--line); color:var(--text); background:var(--white); }
+  .btn-block{ width:100%; }
+  .btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+  .shell{ max-width:1320px; margin:0 auto; padding:0 28px; }
+  @media(max-width:900px){ .shell{ padding:0 16px; } }
+  .breadcrumb{ font-size:12px; color:var(--muted); padding:16px 28px 0; max-width:1320px; margin:0 auto; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .breadcrumb a:hover{ color:var(--teal-dark); }
+  @media(max-width:900px){ .breadcrumb{ padding:14px 16px 0; } }
+
+  /* ================= HERO ================= */
+  .hero{
+    background-color:var(--white);
+    background-image:
+      linear-gradient(rgba(15,181,166,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15,181,166,.07) 1px, transparent 1px);
+    background-size:34px 34px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-inner{ max-width:1320px; margin:0 auto; padding:60px 28px; display:grid; grid-template-columns:1.05fr 0.95fr; gap:44px; align-items:center; }
+  .hero-inner h1{ font-size:42px; line-height:1.1; font-weight:700; margin-bottom:16px; color:var(--text); }
+  .hero-inner h1 span{ color:var(--teal-dark); }
+  .hero-inner p{ font-size:15.5px; color:var(--muted); max-width:460px; line-height:1.65; margin-bottom:28px; }
+  .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:34px; }
+
+  .dash-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:460px; }
+  .dash-card{ background:var(--white); border:1px solid var(--line); border-radius:12px; padding:14px; box-shadow:0 8px 20px rgba(11,15,20,.04); }
+  .dash-card .dv{ font-family:'IBM Plex Mono'; font-size:19px; font-weight:600; color:var(--teal-dark); }
+  .dash-card .dl{ font-size:10px; color:var(--muted); margin-top:4px; line-height:1.3; }
+
+  .hero-visual{ position:relative; background:var(--white); border:1px solid var(--line); border-radius:20px; padding:24px; box-shadow:0 20px 50px rgba(11,15,20,.06); }
+  .hero-visual img{ width:100%; border-radius:12px; }
+  .hv-tag{ position:absolute; top:38px; right:38px; background:var(--brand-yellow); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:8px; display:flex; align-items:center; gap:6px; }
+  .hv-float{ position:absolute; bottom:-16px; left:38px; background:var(--white); border:1px solid var(--line); color:var(--text); padding:10px 16px; border-radius:10px; font-size:12.5px; box-shadow:0 16px 30px rgba(0,0,0,.14); display:flex; gap:8px; align-items:center; }
+  .hv-float b{ font-family:'IBM Plex Mono'; color:var(--teal-dark); font-size:15px; }
+  @media(max-width:900px){ .hero-inner{ grid-template-columns:1fr; padding:36px 16px 44px; } .hero-inner h1{ font-size:29px; } .dash-grid{ max-width:100%; } }
+
+  /* ================= SECTIONS ================= */
+  section{ max-width:1320px; margin:0 auto; padding:52px 28px; }
+  @media(max-width:900px){ section{ padding:36px 16px; } }
+  .sec-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px; flex-wrap:wrap; gap:10px; }
+  .sec-head h2{ font-size:23px; font-weight:700; }
+  .sec-head .eyebrow{ font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; color:var(--teal-dark); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  .see-all{ font-size:13px; font-weight:700; color:var(--teal-dark); cursor:pointer; }
+
+  /* ================= BENTO CATEGORY GRID ================= */
+  .bento{ display:grid; grid-template-columns:1.4fr 1fr 1fr; grid-template-rows:auto auto; gap:16px; }
+  .bento-card{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:26px; cursor:pointer; transition:transform .15s, box-shadow .15s; position:relative; overflow:hidden; color:var(--text); }
+  .bento-card:hover{ transform:translateY(-3px); box-shadow:0 16px 32px rgba(11,15,20,.08); }
+  .bento-card.lg{ grid-row:span 2; display:flex; flex-direction:column; justify-content:flex-end; min-height:280px; background:linear-gradient(160deg,var(--ink),#1D2933); color:#fff; }
+  .bento-card.lg .bc-icon{ position:absolute; top:22px; right:22px; opacity:.18; width:64px; height:64px; }
+  .bento-card h3{ font-size:16px; font-weight:700; margin-bottom:5px; }
+  .bento-card p{ font-size:12.5px; color:var(--muted); }
+  .bento-card.lg p{ color:#B7C0CC; }
+  .bento-card .bc-icon-sm{ margin-bottom:12px; color:var(--teal-dark); }
+  .bento-card .bc-tag{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--teal); margin-top:10px; display:inline-block; }
+  @media(max-width:900px){ .bento{ grid-template-columns:1fr 1fr; } .bento-card.lg{ grid-column:span 2; grid-row:span 1; min-height:170px; } }
+
+  /* ================= TRUST STRIP ================= */
+  .trust-strip{ background:var(--white); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .trust-row{ max-width:1320px; margin:0 auto; padding:26px 28px; display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .trust-card{ display:flex; gap:12px; align-items:flex-start; }
+  .trust-card .ic{ width:36px; height:36px; border-radius:10px; background:var(--teal-glow); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; flex:none; }
+  .trust-card h4{ font-size:13px; margin-bottom:2px; font-family:'Space Grotesk'; }
+  .trust-card p{ font-size:11.5px; color:var(--muted); }
+  @media(max-width:900px){ .trust-row{ grid-template-columns:repeat(2,1fr); padding:20px 16px; } }
+
+  /* ================= PRODUCT CARD ================= */
+  .prod-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  @media(max-width:900px){ .prod-grid{ grid-template-columns:repeat(2,1fr); gap:12px; } }
+  .prod-card{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); display:flex; flex-direction:column; overflow:hidden; cursor:pointer; transition:box-shadow .15s, transform .15s; }
+  .prod-card:hover{ box-shadow:0 14px 28px rgba(11,15,20,.09); transform:translateY(-3px); }
+  .prod-img{ aspect-ratio:1/1; background:#fff; position:relative; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .prod-img img{ width:100%; height:100%; object-fit:contain; }
+  .badge{ position:absolute; top:10px; left:10px; font-family:'IBM Plex Mono'; font-size:10px; font-weight:700; padding:4px 9px; border-radius:6px; }
+  .badge.bestseller{ background:var(--ink); color:#fff; }
+  .badge.deal{ background:var(--alert); color:#fff; }
+  .rating-chip{ position:absolute; top:10px; right:10px; background:var(--teal-glow); color:var(--teal-dark); font-family:'IBM Plex Mono'; font-size:10.5px; font-weight:700; padding:4px 8px; border-radius:6px; display:flex; align-items:center; gap:4px; }
+  .prod-body{ padding:14px 15px 16px; display:flex; flex-direction:column; gap:6px; flex:1; border-top:1px solid var(--line); }
+  .prod-cat{ font-family:'IBM Plex Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .prod-name{ font-size:13.5px; font-weight:600; line-height:1.35; min-height:36px; color:var(--text); }
+  .price-row{ display:flex; align-items:baseline; gap:8px; margin-top:2px; }
+  .price-now{ font-family:'IBM Plex Mono'; font-weight:700; font-size:17px; color:var(--teal-dark); }
+  .price-was{ font-size:12px; color:var(--muted); text-decoration:line-through; }
+  .price-off{ font-size:11px; color:var(--alert); font-weight:700; }
+  .prod-footer{ margin-top:auto; padding-top:8px; display:flex; align-items:center; justify-content:space-between; }
+  .add-circle{ width:36px; height:36px; border-radius:50%; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; transition:background .15s; flex:none; }
+  .add-circle:hover{ background:var(--teal); color:#04211E; }
+  .add-circle.added{ background:var(--teal); color:#04211E; }
+  .ship-note{ font-size:10.5px; color:var(--muted); }
+
+  /* ================= BRANDS ================= */
+  .brands-row{ display:flex; align-items:center; justify-content:space-between; gap:26px; flex-wrap:wrap; background:var(--white); border-radius:var(--radius); padding:30px 34px; border:1px solid var(--line); }
+  .brand-logo-box{ height:72px; display:flex; align-items:center; justify-content:center; flex:1; min-width:120px; }
+  .brand-logo-box img{ height:64px; width:auto; max-width:100%; object-fit:contain; opacity:.9; transition:opacity .15s, transform .15s; }
+  .brand-logo-box:hover img{ opacity:1; transform:scale(1.05); }
+
+  /* ================= SHOP VIEW ================= */
+  .shop-layout{ display:grid; grid-template-columns:230px 1fr; gap:26px; padding:24px 28px 60px; max-width:1320px; margin:0 auto; }
+  @media(max-width:900px){ .shop-layout{ grid-template-columns:1fr; padding:16px 16px 40px; } }
+  .filters{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:20px; align-self:start; position:sticky; top:90px; }
+  @media(max-width:900px){ .filters{ position:static; } }
+  .filters h4{ font-family:'Space Grotesk'; font-size:13px; margin-bottom:12px; }
+  .filters .fgroup{ margin-bottom:20px; }
+  .filters .fgroup label{ display:flex; align-items:center; gap:8px; font-size:13px; padding:5px 0; cursor:pointer; }
+  .filters .fgroup label:hover{ color:var(--teal-dark); }
+  .shop-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
+  .shop-toolbar h2{ font-size:20px; font-weight:700; }
+  .shop-toolbar select{ border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px; background:var(--white); color:var(--text); }
+
+  /* ================= PRODUCT DETAIL ================= */
+  .pd-layout{ display:grid; grid-template-columns:0.9fr 1fr 0.75fr; gap:34px; padding:24px 28px 60px; max-width:1320px; margin:0 auto; align-items:start; }
+  @media(max-width:1000px){ .pd-layout{ grid-template-columns:1fr; padding:16px 16px 40px; } }
+  .pd-gallery{ position:sticky; top:90px; }
+  @media(max-width:1000px){ .pd-gallery{ position:static; } }
+  .pd-main-img{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:30px; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; }
+  .pd-main-img img{ max-height:100%; object-fit:contain; }
+  .pd-thumbs{ display:flex; gap:10px; margin-top:12px; }
+  .pd-thumbs div{ width:60px; height:60px; border:1.5px solid var(--line); border-radius:8px; background:var(--white); padding:6px; }
+  .pd-info h1{ font-size:22px; font-weight:700; margin-bottom:8px; line-height:1.3; }
+  .pd-info .rating-chip{ position:static; display:inline-flex; margin-bottom:14px; }
+  .pd-info .pd-price-row{ display:flex; align-items:baseline; gap:10px; padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:16px; }
+  .pd-info .pd-price-now{ font-family:'IBM Plex Mono'; font-size:26px; font-weight:700; color:var(--teal-dark); }
+  .spec-table{ width:100%; border-collapse:collapse; margin-bottom:20px; }
+  .spec-table tr{ border-bottom:1px solid var(--line); }
+  .spec-table td{ padding:9px 0; font-size:12.5px; }
+  .spec-table td:first-child{ color:var(--muted); font-family:'IBM Plex Mono'; width:40%; }
+  .buybox{ background:var(--ink); color:#fff; border-radius:var(--radius); padding:22px; position:sticky; top:90px; }
+  @media(max-width:1000px){ .buybox{ position:static; } }
+  .buybox .bb-price{ font-family:'IBM Plex Mono'; font-size:24px; font-weight:700; color:var(--teal); margin-bottom:6px; }
+  .buybox .bb-stock{ color:var(--teal); font-weight:600; font-size:12.5px; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+  .buybox .bb-stock .pulse{ width:6px; height:6px; border-radius:50%; background:var(--teal); animation:pulse 2s infinite; }
+  @keyframes pulse{ 0%{box-shadow:0 0 0 0 rgba(15,181,166,.5);} 70%{box-shadow:0 0 0 8px rgba(15,181,166,0);} 100%{box-shadow:0 0 0 0 rgba(15,181,166,0);} }
+  .buybox .bb-ship{ font-size:12px; color:#8B96A3; margin-bottom:16px; line-height:1.6; }
+  .qty-row{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .qty-stepper{ display:flex; align-items:center; border:1px solid rgba(255,255,255,.2); border-radius:8px; }
+  .qty-stepper button{ width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#fff; }
+  .qty-stepper span{ width:34px; text-align:center; font-weight:600; }
+  .buybox .btn{ margin-bottom:10px; }
+
+  /* ================= CART / CHECKOUT VIEW ================= */
+  .cart-layout{ display:grid; grid-template-columns:1fr 340px; gap:26px; padding:24px 28px 60px; max-width:1320px; margin:0 auto; align-items:start; }
+  @media(max-width:900px){ .cart-layout{ grid-template-columns:1fr; padding:16px 16px 40px; } }
+  .cart-list, .checkout-card{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); }
+  .cart-list h2, .checkout-card h2{ padding:18px 22px; border-bottom:1px solid var(--line); font-size:17px; }
+  .cart-row{ display:flex; gap:16px; padding:18px 22px; border-bottom:1px solid var(--line); align-items:center; }
+  .cart-row img{ width:76px; height:76px; object-fit:contain; background:var(--white); border:1px solid var(--line); border-radius:8px; padding:8px; }
+  .cart-row .cr-info{ flex:1; }
+  .cart-row .cr-name{ font-weight:600; font-size:14px; margin-bottom:6px; }
+  .cart-row .cr-cat{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--muted); margin-bottom:8px; }
+  .cart-row .cr-remove{ font-size:12px; color:var(--alert); font-weight:600; cursor:pointer; }
+  .cart-row .cr-price{ font-family:'IBM Plex Mono'; font-weight:700; font-size:15px; width:100px; text-align:right; }
+  .qty-stepper.light{ border-color:var(--line); }
+  .qty-stepper.light button{ color:var(--text); }
+  .summary{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:22px; position:sticky; top:90px; }
+  @media(max-width:900px){ .summary{ position:static; } }
+  .summary h3{ font-size:16px; margin-bottom:16px; }
+  .summary .srow{ display:flex; justify-content:space-between; font-size:13.5px; margin-bottom:10px; color:var(--muted); }
+  .summary .srow.total{ color:var(--text); font-weight:700; font-size:16px; border-top:1px solid var(--line); padding-top:14px; margin-top:6px; }
+  .cart-empty{ padding:70px 20px; text-align:center; color:var(--muted); }
+  .cart-empty .ce-icon{ margin:0 auto 16px; color:var(--line); }
+
+  .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:20px 22px; }
+  .form-grid label{ display:flex; flex-direction:column; gap:6px; font-size:12.5px; color:var(--muted); }
+  .form-grid input{ border:1px solid var(--line); border-radius:8px; padding:10px 12px; font-size:13.5px; background:var(--bg); color:var(--text); outline:none; }
+  .form-grid input:focus{ border-color:var(--teal); }
+  .form-grid label.full{ grid-column:1 / -1; }
+  .pay-options{ padding:6px 22px 22px; display:flex; flex-direction:column; gap:10px; }
+  .pay-card{ display:flex; align-items:center; gap:12px; border:1.5px solid var(--line); border-radius:10px; padding:13px 14px; font-size:13.5px; cursor:pointer; transition:border-color .15s; }
+  .pay-card:has(input:checked){ border-color:var(--teal); background:var(--teal-glow); }
+  .pay-card input{ accent-color:var(--teal); }
+
+  /* ================= SUCCESS VIEW ================= */
+  .success-wrap{ max-width:520px; margin:0 auto; padding:90px 28px; text-align:center; }
+  .success-icon{ width:76px; height:76px; border-radius:50%; background:var(--teal-glow); color:var(--teal-dark); display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
+  .success-wrap h1{ font-size:26px; margin-bottom:10px; }
+  .order-id{ font-family:'IBM Plex Mono'; font-size:14px; color:var(--teal-dark); font-weight:600; margin-bottom:18px; }
+  .success-wrap p{ color:var(--muted); font-size:14px; line-height:1.6; margin-bottom:28px; }
+
+  /* ================= FOOTER ================= */
+  footer{ background:var(--ink); color:#8B96A3; margin-top:20px; }
+  .footer-logo-chip{ background:#fff; display:inline-block; padding:8px 14px; border-radius:8px; margin-bottom:16px; }
+  .footer-logo-chip img{ height:26px; }
+  .footer-grid{ max-width:1320px; margin:0 auto; padding:50px 28px 26px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; }
+  .footer-grid h4{ color:#fff; font-size:13px; margin-bottom:14px; font-family:'Space Grotesk'; }
+  .footer-grid p, .footer-grid a{ font-size:12.5px; line-height:2.1; }
+  .footer-grid a:hover{ color:var(--teal); }
+  .footer-bottom{ border-top:1px solid rgba(255,255,255,.08); padding:16px 28px; max-width:1320px; margin:0 auto; display:flex; justify-content:space-between; font-size:11.5px; flex-wrap:wrap; gap:10px; }
+  @media(max-width:900px){ .footer-grid{ grid-template-columns:1fr 1fr; padding:36px 16px 20px; } footer{ display:none; } }
+
+  .toast{
+    position:fixed; bottom:24px; right:24px; background:var(--ink); color:#fff; padding:14px 20px; border-radius:10px;
+    font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:10px; box-shadow:0 10px 30px rgba(0,0,0,.3);
+    transform:translateY(20px); opacity:0; pointer-events:none; transition:.25s; z-index:200;
+  }
+  .toast.show{ transform:translateY(0); opacity:1; }
+  .toast .tick{ background:var(--teal); color:#04211E; border-radius:50%; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex:none; }
+  @media(max-width:900px){ .toast{ bottom:calc(env(safe-area-inset-bottom) + 88px); right:16px; left:16px; } }
+</style>
+</head>
+<body>
+
+<div class="topline">
+  <div>Calle Industrial Engombe #16, Av. 6 de Noviembre · Santo Domingo</div>
+  <div><a href="tel:8297944433">(829) 794-4433</a> &nbsp;·&nbsp; <a href="mailto:info@galusasrl.com.do">info@galusasrl.com.do</a></div>
+</div>
+
+<!-- ============ DESKTOP HEADER ============ -->
+<header class="desktop-header">
+  <div class="hdr-row">
+    <img class="logo-img" src="https://galusasrl.com.do/wp-content/uploads/2022/03/Galusa-LOGO-01-e1649691756343.png" alt="Galusa Import" onclick="showView('home')">
+    <nav class="dnav">
+      <button onclick="showView('home')">Inicio</button>
+      <button onclick="showView('shop','Calzado')">Calzado</button>
+      <button onclick="showView('shop','Reflectivos')">Reflectivos</button>
+      <button onclick="showView('shop','Vial')">Vial</button>
+      <button onclick="showView('shop','Protección personal')">Protección</button>
+      <button onclick="showView('shop')">Tienda completa</button>
+      <button onclick="showView('about')">Nosotros</button>
+    </nav>
+    <div class="hdr-search">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" placeholder="Buscar producto..." onkeydown="if(event.key==='Enter') showView('shop')">
+    </div>
+    <button class="icon-btn theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema"></button>
+    <div class="cart-pill" onclick="showView('cart')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg>
+      <span id="cartHeaderTotal">RD$0</span><span class="cc" id="cartCount">0</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ MOBILE APP BAR ============ -->
+<div class="install-banner">
+  <div class="ib-left">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 19h16"/></svg>
+    <span>Instala <b>Galusa Import</b> en tu pantalla de inicio</span>
+  </div>
+  <button onclick="this.parentElement.style.display='none'">Listo</button>
+</div>
+<header class="app-bar">
+  <img class="logo-img" src="https://galusasrl.com.do/wp-content/uploads/2022/03/Galusa-LOGO-01-e1649691756343.png" alt="Galusa Import" onclick="showView('home')">
+  <div class="ab-actions">
+    <button class="icon-btn" onclick="showView('shop')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+    <button class="icon-btn theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema"></button>
+    <button class="icon-btn ab-icon" onclick="showView('cart')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg>
+      <span class="ab-badge" id="cartCountMobile">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== HOME ===================== -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>Seguridad industrial, <span>gestionada como tecnología.</span></h1>
+        <p>Importamos y distribuimos equipo de protección certificado en toda República Dominicana. Un catálogo vivo, entregas rastreables y soporte técnico real.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-teal" onclick="showView('shop')">Ver catálogo</a>
+          <a class="btn btn-ghost" onclick="showView('account')">Cotizar por volumen</a>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-card"><div class="dv">128</div><div class="dl">Envíos activos hoy</div></div>
+          <div class="dash-card"><div class="dv">98%</div><div class="dl">Entregas a tiempo</div></div>
+          <div class="dash-card"><div class="dv">24h</div><div class="dl">Despacho en Santo Domingo</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <span class="hv-tag"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg> CERTIFICADO</span>
+        <img src="https://galusasrl.com.do/wp-content/uploads/2022/07/Botas-Lether-Ingco.png" alt="Botas industriales">
+        <div class="hv-float">Desde <b>RD$1,570</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-strip">
+    <div class="trust-row">
+      <div class="trust-card"><div class="ic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><div><h4>Calidad certificada</h4><p>Marcas reconocidas en la industria</p></div></div>
+      <div class="trust-card"><div class="ic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="10" rx="1"/><path d="M15 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg></div><div><h4>Envío a todo el país</h4><p>Incluye cobertura hacia Haití</p></div></div>
+      <div class="trust-card"><div class="ic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg></div><div><h4>Soporte post-compra</h4><p>Acompañamiento después de la venta</p></div></div>
+      <div class="trust-card"><div class="ic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.3"/><circle cx="17" cy="17" r="2.3"/></svg></div><div><h4>Descuento por volumen</h4><p>Precios especiales para empresas</p></div></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head"><div><div class="eyebrow">EXPLORA POR NECESIDAD</div><h2>Comprar por categoría</h2></div></div>
+    <div class="bento">
+      <div class="bento-card lg" onclick="showView('shop','Calzado')">
+        <svg class="bc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v9.5c0 .8.5 1.3 1 1.7l3 2c.6.4 1 .9 1 1.8v1h10a2 2 0 0 0-1-1.7l-4-2.5V3z"/><path d="M6 3h6"/></svg>
+        <h3>Calzado de seguridad</h3>
+        <p>Botas dieléctricas, punta de acero e industriales para todo tipo de terreno.</p>
+        <span class="bc-tag">→ 4 líneas disponibles</span>
+      </div>
+      <div class="bento-card" onclick="showView('shop','Reflectivos')">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3 6 5v16h5v-8h2v8h5V5l-3-2-3 2-3-2Z"/></svg>
+        <h3>Ropa reflectiva</h3><p>Chalecos y polos alta visibilidad</p>
+      </div>
+      <div class="bento-card" onclick="showView('shop','Vial')">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 20h16Z"/><path d="M8 13h8M6.5 16.5h11"/></svg>
+        <h3>Seguridad vial</h3><p>Conos, boyas y barreras</p>
+      </div>
+      <div class="bento-card" onclick="showView('shop','Protección personal')">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5a1.5 1.5 0 0 1 3 0v8M17 12v-4a1.5 1.5 0 0 1 3 0v7c0 3.3-2.7 6-6 6h-2c-3 0-4.5-1.5-6-4l-2-4a1.4 1.4 0 0 1 2.4-1.4L8 13"/></svg>
+        <h3>Protección personal</h3><p>Guantes, lentes y arneses</p>
+      </div>
+      <div class="bento-card" onclick="showView('shop','Emergencia')">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="8" width="6" height="12" rx="2"/><path d="M12 8V5M10 5h4M9 11h6"/><circle cx="12" cy="3.2" r="1.1" fill="currentColor" stroke="none"/></svg>
+        <h3>Emergencia</h3><p>Extintores certificados</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="sec-head">
+      <div><div class="eyebrow">OFERTAS Y MÁS PEDIDOS</div><h2>Recomendados para ti</h2></div>
+      <span class="see-all" onclick="showView('shop')">Ver todo →</span>
+    </div>
+    <div class="prod-grid" id="homeGrid"></div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="brands-row" id="brandsRow"></div>
+  </section>
+</div>
+
+<!-- ===================== SHOP ===================== -->
+<div class="view" id="view-shop">
+  <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <span id="shopCrumb">Tienda</span></div>
+  <div class="shop-layout">
+    <aside class="filters">
+      <h4>Categoría</h4>
+      <div class="fgroup" id="filterCats">
+        <label><input type="checkbox" value="all" checked onclick="filterShop('all')"> Todas</label>
+        <label><input type="checkbox" value="Calzado" onclick="filterShop('Calzado')"> Calzado de seguridad</label>
+        <label><input type="checkbox" value="Reflectivos" onclick="filterShop('Reflectivos')"> Ropa reflectiva</label>
+        <label><input type="checkbox" value="Vial" onclick="filterShop('Vial')"> Seguridad vial</label>
+        <label><input type="checkbox" value="Protección personal" onclick="filterShop('Protección personal')"> Protección personal</label>
+        <label><input type="checkbox" value="Emergencia" onclick="filterShop('Emergencia')"> Emergencia</label>
+      </div>
+      <h4>Precio</h4>
+      <div class="fgroup">
+        <label><input type="radio" name="price"> Menos de RD$500</label>
+        <label><input type="radio" name="price"> RD$500 – RD$2,000</label>
+        <label><input type="radio" name="price"> Más de RD$2,000</label>
+      </div>
+      <h4>Marca</h4>
+      <div class="fgroup">
+        <label><input type="checkbox"> JALT Safety</label>
+        <label><input type="checkbox"> YEGSA</label>
+        <label><input type="checkbox"> Ingco</label>
+      </div>
+    </aside>
+    <div>
+      <div class="shop-toolbar">
+        <h2 id="shopTitle">Todos los productos</h2>
+        <select><option>Ordenar: relevancia</option><option>Precio: menor a mayor</option><option>Precio: mayor a menor</option><option>Mejor valorados</option></select>
+      </div>
+      <div class="prod-grid" id="shopGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PRODUCT DETAIL ===================== -->
+<div class="view" id="view-product">
+  <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <a onclick="showView('shop')">Tienda</a> / <span id="pdCrumb">Producto</span></div>
+  <div class="pd-layout" id="pdLayout"></div>
+  <section style="padding-top:0;">
+    <div class="sec-head"><h2>También te puede interesar</h2></div>
+    <div class="prod-grid" id="relatedGrid"></div>
+  </section>
+</div>
+
+<!-- ===================== CART ===================== -->
+<div class="view" id="view-cart">
+  <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <span>Carrito</span></div>
+  <div class="cart-layout">
+    <div class="cart-list">
+      <h2>Tu carrito</h2>
+      <div id="cartItems"></div>
+    </div>
+    <div class="summary">
+      <h3>Resumen del pedido</h3>
+      <div class="srow"><span>Subtotal (<span id="sumCount">0</span> productos)</span><span id="sumSubtotal">RD$0</span></div>
+      <div class="srow"><span>Envío estimado</span><span id="sumShip">RD$0</span></div>
+      <div class="srow total"><span>Total</span><span id="sumTotal">RD$0</span></div>
+      <button class="btn btn-teal btn-block" style="margin-top:16px;" onclick="goToCheckout()">Proceder al pago</button>
+      <a class="btn btn-outline btn-block" style="margin-top:10px;" onclick="showView('shop')">Seguir comprando</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CHECKOUT (simulado) ===================== -->
+<div class="view" id="view-checkout">
+  <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <a onclick="showView('cart')">Carrito</a> / <span>Pago</span></div>
+  <div class="cart-layout">
+    <div>
+      <div class="checkout-card" style="margin-bottom:18px;">
+        <h2>Datos de envío</h2>
+        <div class="form-grid">
+          <label>Nombre completo<input type="text" placeholder="Ej. Juan Pérez"></label>
+          <label>Teléfono<input type="tel" placeholder="(829) 000-0000"></label>
+          <label class="full">Dirección<input type="text" placeholder="Calle, número, sector"></label>
+          <label>Ciudad<input type="text" placeholder="Santo Domingo"></label>
+          <label>Referencia<input type="text" placeholder="Punto de referencia (opcional)"></label>
+        </div>
+      </div>
+      <div class="checkout-card">
+        <h2>Método de pago</h2>
+        <div class="pay-options">
+          <label class="pay-card"><input type="radio" name="pay" checked> Tarjeta de crédito o débito</label>
+          <label class="pay-card"><input type="radio" name="pay"> Transferencia bancaria</label>
+          <label class="pay-card"><input type="radio" name="pay"> Efectivo contra entrega</label>
+        </div>
+      </div>
+    </div>
+    <div class="summary">
+      <h3>Resumen del pedido</h3>
+      <div class="srow"><span>Subtotal</span><span id="coSubtotal">RD$0</span></div>
+      <div class="srow"><span>Envío</span><span id="coShip">RD$0</span></div>
+      <div class="srow total"><span>Total a pagar</span><span id="coTotal">RD$0</span></div>
+      <button class="btn btn-teal btn-block" style="margin-top:16px;" onclick="confirmOrder()">Confirmar pedido</button>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;">Este es un flujo simulado para fines de demostración — no se procesará ningún cobro real.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SUCCESS (simulado) ===================== -->
+<div class="view" id="view-success">
+  <div class="success-wrap">
+    <div class="success-icon"><svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+    <h1>Pedido confirmado</h1>
+    <div class="order-id" id="orderNumber">#GAL-000000</div>
+    <p>Te contactaremos al número indicado para coordinar la entrega. Tiempo estimado: 24–48h en Santo Domingo, cobertura nacional y hacia Haití.</p>
+    <button class="btn btn-teal" onclick="showView('home')">Volver al inicio</button>
+  </div>
+</div>
+
+<!-- ===================== ABOUT / NOSOTROS ===================== -->
+<div class="view" id="view-about">
+  <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <span>Nosotros</span></div>
+  <section style="padding-bottom:0;">
+    <div class="sec-head"><div><div class="eyebrow">QUIÉNES SOMOS</div><h2>Importamos seguridad, no solo productos</h2></div></div>
+    <p style="max-width:640px; color:var(--muted); font-size:15px; line-height:1.7; margin-bottom:34px;">
+      Galusa Import distribuye equipo de protección industrial y vial en toda República Dominicana. Trabajamos con constructoras, industrias y flotas viales que necesitan un proveedor confiable, con inventario real y soporte después de la venta — no solo una tienda que vende y desaparece.
+    </p>
+    <div class="dash-grid" style="max-width:100%; grid-template-columns:repeat(4,1fr);">
+      <div class="dash-card"><div class="dv">500+</div><div class="dl">Productos en catálogo</div></div>
+      <div class="dash-card"><div class="dv">JALT · YEGSA</div><div class="dl">Marcas propias</div></div>
+      <div class="dash-card"><div class="dv">RD + HT</div><div class="dl">Cobertura de envío</div></div>
+      <div class="dash-card"><div class="dv">24–48h</div><div class="dl">Despacho promedio</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div><div class="eyebrow">CÓMO TRABAJAMOS</div><h2>Lo que nos diferencia</h2></div></div>
+    <div class="bento">
+      <div class="bento-card lg" onclick="showView('shop')">
+        <svg class="bc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        <h3>Calidad certificada</h3>
+        <p>Trabajamos solo con marcas y equipos que cumplen normas de seguridad reconocidas en la industria.</p>
+        <span class="bc-tag">→ Ver catálogo certificado</span>
+      </div>
+      <div class="bento-card">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="10" rx="1"/><path d="M15 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+        <h3>Entrega rápida</h3><p>Despacho en 24–48h en Santo Domingo, con cobertura nacional y hacia Haití</p>
+      </div>
+      <div class="bento-card">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M20 19v1a3 3 0 0 1-3 3h-3"/></svg>
+        <h3>Soporte real</h3><p>Acompañamiento técnico antes y después de la compra, no solo durante el checkout</p>
+      </div>
+      <div class="bento-card">
+        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 5C19 15.6 12 20 12 20Z"/></svg>
+        <h3>Compromiso</h3><p>Precios especiales y atención directa para pedidos por volumen</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="brands-row" id="brandsRowAbout"></div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="bento-card lg" style="min-height:auto; padding:44px; display:flex; flex-direction:row; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; cursor:default;">
+      <div>
+        <h3 style="font-size:20px; margin-bottom:6px;">¿Listo para equipar tu proyecto?</h3>
+        <p style="max-width:420px;">Cotiza por volumen o explora el catálogo completo de equipo certificado.</p>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap;">
+        <a class="btn btn-teal" onclick="showView('shop')">Ver catálogo</a>
+        <a class="btn btn-ghost" style="color:#fff; border-color:rgba(255,255,255,.25);" onclick="showView('account')">Contactar</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===================== CONTACT (mobile tab target) ===================== -->
+<div class="view" id="view-account">
+  <section>
+    <div class="sec-head"><div><div class="eyebrow">CONTACTO</div><h2>Hablemos de tu proyecto</h2></div></div>
+    <div class="bento" style="grid-template-columns:1fr 1fr;">
+      <div class="bento-card"><svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg><h3>Teléfono</h3><p>(829) 794-4433</p></div>
+      <div class="bento-card"><svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg><h3>Correo</h3><p>info@galusasrl.com.do</p></div>
+      <div class="bento-card"><svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.2 7-12a7 7 0 0 0-14 0c0 4.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg><h3>Dirección</h3><p>Calle Industrial Engombe #16, Av. 6 de Noviembre</p></div>
+      <div class="bento-card"><svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><h3>Horario</h3><p>Lunes a Viernes, 8:30am – 5:30pm</p></div>
+    </div>
+    <div style="margin-top:16px;">
+      <a class="btn btn-outline btn-block" onclick="showView('about')">Conoce más sobre Galusa Import</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo-chip"><img src="https://galusasrl.com.do/wp-content/uploads/2022/03/Galusa-LOGO-01-e1649691756343.png" alt="Galusa Import"></div>
+      <p style="max-width:280px;">Tu socio en soluciones de seguridad industrial y vial en República Dominicana.</p>
+    </div>
+    <div><h4>Navegación</h4><p><a onclick="showView('home')">Inicio</a></p><p><a onclick="showView('shop')">Tienda</a></p><p><a onclick="showView('about')">Nosotros</a></p><p><a onclick="showView('account')">Contacto</a></p></div>
+    <div><h4>Contacto</h4><p>(829) 794-4433</p><p>info@galusasrl.com.do</p><p>Calle Industrial Engombe #16<br>Av. 6 de Noviembre</p></div>
+    <div><h4>Horario</h4><p>Lunes – Viernes<br>8:30am – 5:30pm</p><h4 style="margin-top:18px;">Síguenos</h4><p>Facebook · Instagram</p></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Galusa Import. Todos los derechos reservados.</span>
+    <span>Prototipo de diseño — no es el sitio en producción</span>
+  </div>
+</footer>
+
+<!-- ============ MOBILE BOTTOM TAB BAR ============ -->
+<nav class="tabbar">
+  <button class="tab-btn active" data-tab="home" onclick="showView('home')">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>
+    Inicio
+  </button>
+  <button class="tab-btn" data-tab="shop" onclick="showView('shop')">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Tienda
+  </button>
+  <button class="tab-btn" data-tab="cart" onclick="showView('cart')" style="position:relative;">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg>
+    <span class="tbadge" id="tabCartBadge" style="display:none;">0</span>
+    Carrito
+  </button>
+  <button class="tab-btn" data-tab="account" onclick="showView('account')">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 2 6a2 2 0 0 1 2-2Z"/></svg>
+    Contacto
+  </button>
+</nav>
+
+<div class="toast" id="toast">
+  <span class="tick"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>
+  <span id="toastMsg">Añadido al carrito</span>
+</div>
+
+<script>
+const SUN = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.4M12 19.6V22M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2 12h2.4M19.6 12H22M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>';
+const MOON = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>';
+const STAR = '<svg class="icon-sm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5 15 9l7 .8-5.2 4.9L18 21l-6-3.4L6 21l1.2-6.3L2 9.8 9 9z"/></svg>';
+const CART_LG = '<svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg>';
+
+const products = [
+  {id:1, name:"Botas de seguridad JB", cat:"Calzado", price:1570, was:null, rating:4.6, badge:"bestseller", img:"https://galusasrl.com.do/wp-content/uploads/2021/08/Botas-Safety-Jogger-3-1.png",
+    bullets:["Puntera de acero certificada anti-impacto","Suela antideslizante y resistente a aceites","Ideal para construcción e industria pesada"],
+    specs:{"Material":"Cuero + acero","Certificación":"ASTM F2413","Origen":"Importado","Garantía":"6 meses"}},
+  {id:2, name:"Chaleco reflectivo premium con bolsillos", cat:"Reflectivos", price:280, was:350, rating:4.5, badge:"deal", img:"https://galusasrl.com.do/wp-content/uploads/2022/03/268BF8BB-BAE0-4DE4-ADD0-2D41012D525B-600x600.jpeg",
+    bullets:["Cinta reflectiva de alta visibilidad 360°","Zipper frontal y bolsillos funcionales","Cumple estándares de seguridad vial"],
+    specs:{"Material":"Poliéster + cinta 3M","Certificación":"Clase 2","Origen":"Importado","Garantía":"3 meses"}},
+  {id:3, name:"Conos de seguridad 70cm (PVC)", cat:"Vial", price:700, was:null, rating:4.4, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2022/04/Cono-Vial-1.png",
+    bullets:["PVC resistente a impactos y clima","Base ancha para mayor estabilidad","Ideal para obras y control de tránsito"],
+    specs:{"Material":"PVC flexible","Altura":"70cm","Origen":"Importado","Garantía":"No aplica"}},
+  {id:4, name:"Extintor ABC 2kg", cat:"Emergencia", price:780, was:null, rating:4.8, badge:"bestseller", img:"https://galusasrl.com.do/wp-content/uploads/2022/01/C4749842-C1A5-4335-B3AF-CBCAA7087C9E-600x600.jpeg",
+    bullets:["Apto para fuegos tipo A, B y C","Incluye soporte de pared","Certificado para uso comercial e industrial"],
+    specs:{"Capacidad":"2kg","Tipo":"Polvo ABC","Origen":"Importado","Garantía":"1 año"}},
+  {id:5, name:"Arnés de seguridad premium", cat:"Protección personal", price:2800, was:null, rating:4.7, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2023/03/E2DDC18B-605F-415F-9286-B26E431985FC.jpeg",
+    bullets:["Doble anclaje dorsal y frontal","Hebillas de ajuste rápido","Soporta trabajos en altura certificados"],
+    specs:{"Material":"Poliéster reforzado","Certificación":"ANSI Z359","Origen":"Importado","Garantía":"6 meses"}},
+  {id:6, name:"Guantes de carnaza para soldar", cat:"Protección personal", price:140, was:null, rating:4.3, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2022/03/B61512F3-0CE8-4276-A5F6-74636F925120-1-600x600.jpeg",
+    bullets:["Resistente al calor y chispas","Refuerzo doble en la palma","Cómodo para uso prolongado"],
+    specs:{"Material":"Carnaza vacuna","Talla":"Única","Origen":"Importado","Garantía":"No aplica"}},
+  {id:7, name:"Tenis de seguridad JALT reflectivos", cat:"Calzado", price:2500, was:null, rating:4.6, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2023/03/C4106E68-3830-48D3-837D-EF04CBC871DC.jpeg",
+    bullets:["Diseño liviano tipo tenis deportivo","Detalles reflectivos para baja visibilidad","Puntera protegida y suela antiderrapante"],
+    specs:{"Marca":"JALT Safety","Certificación":"ASTM F2413","Origen":"Importado","Garantía":"6 meses"}},
+  {id:8, name:"Barrera de seguridad New Jersey", cat:"Vial", price:11000, was:null, rating:4.5, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2023/08/barrerarojo-y-amarillo.jpeg",
+    bullets:["Alta resistencia para separación vial","Colores de alta visibilidad","Apilable para almacenamiento eficiente"],
+    specs:{"Material":"Plástico rotomoldeado","Uso":"Vial / industrial","Origen":"Importado","Garantía":"1 año"}},
+  {id:9, name:"Botas industriales dieléctricas Ingco", cat:"Calzado", price:2000, was:null, rating:4.5, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2022/07/Botas-dielecticas-Ingco-1-1-1.png",
+    bullets:["Aislamiento dieléctrico certificado","Puntera de acero reforzada","Resistente a hidrocarburos"],
+    specs:{"Marca":"Ingco","Aislamiento":"6KV","Origen":"Importado","Garantía":"6 meses"}},
+  {id:10, name:"Lentes protectores Ingco oscuros", cat:"Protección personal", price:160, was:null, rating:4.2, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2022/06/IMG_0691-600x600.jpeg",
+    bullets:["Protección UV anti-rayones","Ajuste ergonómico ligero","Ideal para exteriores e interiores"],
+    specs:{"Marca":"Ingco","Protección":"UV400","Origen":"Importado","Garantía":"3 meses"}},
+  {id:11, name:"Cinta de señalización de peligro", cat:"Vial", price:290, was:350, rating:4.4, badge:"deal", img:"https://galusasrl.com.do/wp-content/uploads/2022/06/IMG_0697-600x600.jpeg",
+    bullets:["Alta visibilidad amarillo y negro","Resistente a intemperie","Rollo de gran cobertura"],
+    specs:{"Material":"Polietileno","Longitud":"100m","Origen":"Importado","Garantía":"No aplica"}},
+  {id:12, name:"Faja de seguridad para carga", cat:"Protección personal", price:600, was:null, rating:4.3, badge:null, img:"https://galusasrl.com.do/wp-content/uploads/2022/06/Fajas-De-seguridad-para-carga--600x600.jpeg",
+    bullets:["Soporte lumbar ajustable","Tirantes reforzados","Recomendada para carga y descarga"],
+    specs:{"Material":"Neopreno + nylon","Talla":"Ajustable","Origen":"Importado","Garantía":"3 meses"}},
+];
+
+const brandLogos = [
+  "https://galusasrl.com.do/wp-content/uploads/2023/08/logos-galusa-05.png",
+  "https://galusasrl.com.do/wp-content/uploads/2023/08/logos-galusa-04.png",
+  "https://galusasrl.com.do/wp-content/uploads/2023/08/logos-galusa-03.png",
+  "https://galusasrl.com.do/wp-content/uploads/2023/08/logos-galusa-02.png",
+  "https://galusasrl.com.do/wp-content/uploads/2023/08/logos-galusa-01.png",
+];
+
+let cart = [];
+let currentShopCat = 'all';
+
+function money(n){ return 'RD$' + n.toLocaleString('es-DO'); }
+
+function renderBrands(){
+  const html = brandLogos.map(src => `<div class="brand-logo-box"><img src="${src}" alt="marca"></div>`).join('');
+  document.getElementById('brandsRow').innerHTML = html;
+  const aboutRow = document.getElementById('brandsRowAbout');
+  if(aboutRow) aboutRow.innerHTML = html;
+}
+
+function productCard(p){
+  const badgeHtml = p.badge === 'bestseller' ? '<span class="badge bestseller">Top ventas</span>'
+    : p.badge === 'deal' ? '<span class="badge deal">Oferta</span>' : '';
+  const priceHtml = p.was
+    ? `<div class="price-row"><span class="price-now">${money(p.price)}</span><span class="price-was">${money(p.was)}</span><span class="price-off">-${Math.round((1-p.price/p.was)*100)}%</span></div>`
+    : `<div class="price-row"><span class="price-now">${money(p.price)}</span></div>`;
+  return `
+    <div class="prod-card">
+      <div class="prod-img" onclick="openProduct(${p.id})">
+        ${badgeHtml}
+        <span class="rating-chip">${STAR}${p.rating}</span>
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="prod-body">
+        <div class="prod-cat">${p.cat}</div>
+        <div class="prod-name" onclick="openProduct(${p.id})">${p.name}</div>
+        ${priceHtml}
+        <div class="prod-footer">
+          <span class="ship-note">Envío gratis +RD$3,000</span>
+          <button class="add-circle" onclick="addToCart(${p.id}, this, event)">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderHomeGrid(){
+  const featured = products.filter(p => p.badge).concat(products.filter(p=>!p.badge)).slice(0,8);
+  document.getElementById('homeGrid').innerHTML = featured.map(productCard).join('');
+}
+
+function renderShopGrid(){
+  const list = currentShopCat === 'all' ? products : products.filter(p => p.cat === currentShopCat);
+  document.getElementById('shopGrid').innerHTML = list.map(productCard).join('');
+  document.getElementById('shopTitle').textContent = currentShopCat === 'all' ? `Todos los productos (${list.length})` : `${currentShopCat} (${list.length})`;
+  document.getElementById('shopCrumb').textContent = currentShopCat === 'all' ? 'Tienda' : currentShopCat;
+  document.querySelectorAll('#filterCats input').forEach(inp => { inp.checked = (inp.value === currentShopCat); });
+}
+
+function filterShop(cat){ currentShopCat = cat; renderShopGrid(); }
+
+function openProduct(id){
+  const p = products.find(x => x.id === id);
+  document.getElementById('pdCrumb').textContent = p.name;
+  const specsHtml = Object.entries(p.specs).map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+  const priceHtml = p.was
+    ? `<div class="bb-price">${money(p.price)} <span style="font-size:14px;color:#8B96A3;text-decoration:line-through;font-weight:500;">${money(p.was)}</span></div>`
+    : `<div class="bb-price">${money(p.price)}</div>`;
+  document.getElementById('pdLayout').innerHTML = `
+    <div class="pd-gallery">
+      <div class="pd-main-img"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="pd-thumbs"><div><img src="${p.img}"></div><div><img src="${p.img}"></div><div><img src="${p.img}"></div></div>
+    </div>
+    <div class="pd-info">
+      <div class="prod-cat">${p.cat} · Galusa Import</div>
+      <h1>${p.name}</h1>
+      <span class="rating-chip">${STAR}${p.rating} verificado</span>
+      <div class="pd-price-row"><span class="pd-price-now">${money(p.price)}</span>${p.was ? `<span class="price-was">${money(p.was)}</span><span class="price-off">-${Math.round((1-p.price/p.was)*100)}%</span>` : ''}</div>
+      <ul style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px;list-style:none;">${p.bullets.map(b=>`<li style="font-size:13.5px;display:flex;gap:8px;line-height:1.5;"><svg class="icon-sm" style="color:var(--teal-dark);flex:none;margin-top:3px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>${b}</li>`).join('')}</ul>
+      <table class="spec-table">${specsHtml}</table>
+    </div>
+    <div class="buybox">
+      ${priceHtml}
+      <div class="bb-stock"><span class="pulse"></span> En stock — listo para envío</div>
+      <div class="bb-ship">Entrega en 24–48h en Santo Domingo. Cobertura nacional y hacia Haití.<br>Descuento disponible por compra al por mayor.</div>
+      <div class="qty-row">
+        <span style="font-size:13px;">Cantidad:</span>
+        <div class="qty-stepper">
+          <button onclick="stepQty(-1)"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+          <span id="pdQty">1</span>
+          <button onclick="stepQty(1)"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+      <button class="btn btn-teal btn-block" onclick="addToCart(${p.id}, this, event, true)">Añadir al carrito</button>
+      <button class="btn btn-ghost btn-block" style="color:#fff;border-color:rgba(255,255,255,.25);" onclick="addToCart(${p.id}, this, event); showView('cart')">Comprar ahora</button>
+    </div>
+  `;
+  const related = products.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,4);
+  document.getElementById('relatedGrid').innerHTML = related.map(productCard).join('');
+  showView('product', null, true);
+}
+
+function stepQty(delta){
+  const el = document.getElementById('pdQty');
+  let val = parseInt(el.textContent) + delta;
+  if(val < 1) val = 1;
+  el.textContent = val;
+}
+
+function addToCart(id, btn, evt, useQty){
+  if(evt) evt.stopPropagation();
+  const qty = useQty ? parseInt(document.getElementById('pdQty').textContent) : 1;
+  const p = products.find(x => x.id === id);
+  const item = cart.find(i => i.id === id);
+  if(item){ item.qty += qty; } else { cart.push({...p, qty}); }
+  if(btn){
+    btn.classList.add('added');
+    setTimeout(()=> btn.classList.remove('added'), 900);
+  }
+  showToast(`${p.name} añadido al carrito`);
+  renderCartBadge();
+  renderCartView();
+}
+
+function removeFromCart(id){ cart = cart.filter(i => i.id !== id); renderCartBadge(); renderCartView(); }
+
+function changeQty(id, delta){
+  const item = cart.find(i => i.id === id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0){ removeFromCart(id); return; }
+  renderCartBadge(); renderCartView();
+}
+
+function renderCartBadge(){
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  const total = cart.reduce((s,i)=>s+i.qty*i.price,0);
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartHeaderTotal').textContent = money(total);
+  document.getElementById('cartCountMobile').textContent = count;
+  const tabBadge = document.getElementById('tabCartBadge');
+  tabBadge.textContent = count;
+  tabBadge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function cartTotals(){
+  const count = cart.reduce((s,i)=>s+i.qty,0);
+  const subtotal = cart.reduce((s,i)=>s+i.qty*i.price,0);
+  const ship = subtotal > 0 && subtotal < 3000 ? 250 : 0;
+  return {count, subtotal, ship, total:subtotal+ship};
+}
+
+function renderCartView(){
+  const wrap = document.getElementById('cartItems');
+  if(cart.length === 0){
+    wrap.innerHTML = `<div class="cart-empty"><div class="ce-icon">${CART_LG}</div>Tu carrito está vacío.<br><br><a class="btn btn-teal" onclick="showView('shop')">Explorar productos</a></div>`;
+  } else {
+    wrap.innerHTML = cart.map(i => `
+      <div class="cart-row">
+        <img src="${i.img}">
+        <div class="cr-info">
+          <div class="cr-name">${i.name}</div>
+          <div class="cr-cat">${i.cat}</div>
+          <div class="qty-stepper light" style="display:inline-flex;">
+            <button onclick="changeQty(${i.id},-1)"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+            <span>${i.qty}</span>
+            <button onclick="changeQty(${i.id},1)"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          </div>
+          &nbsp;&nbsp;<span class="cr-remove" onclick="removeFromCart(${i.id})">Eliminar</span>
+        </div>
+        <div class="cr-price">${money(i.price * i.qty)}</div>
+      </div>
+    `).join('');
+  }
+  const t = cartTotals();
+  document.getElementById('sumCount').textContent = t.count;
+  document.getElementById('sumSubtotal').textContent = money(t.subtotal);
+  document.getElementById('sumShip').textContent = t.subtotal === 0 ? 'RD$0' : (t.ship === 0 ? 'Gratis' : money(t.ship));
+  document.getElementById('sumTotal').textContent = money(t.total);
+}
+
+function goToCheckout(){
+  if(cart.length === 0){ showToast('Agrega productos antes de continuar'); return; }
+  const t = cartTotals();
+  document.getElementById('coSubtotal').textContent = money(t.subtotal);
+  document.getElementById('coShip').textContent = t.ship === 0 ? 'Gratis' : money(t.ship);
+  document.getElementById('coTotal').textContent = money(t.total);
+  showView('checkout');
+}
+
+function confirmOrder(){
+  const orderId = 'GAL-' + Math.floor(100000 + Math.random()*900000);
+  document.getElementById('orderNumber').textContent = '#' + orderId;
+  cart = [];
+  renderCartBadge();
+  renderCartView();
+  showView('success');
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+function showView(name, cat, skipCatReset){
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(name === 'shop' && cat && !skipCatReset){ currentShopCat = cat; }
+  if(name === 'shop'){ renderShopGrid(); }
+  document.querySelectorAll('.tab-btn').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  updateThemeIcons();
+}
+
+function updateThemeIcons(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.querySelectorAll('.theme-toggle').forEach(btn => { btn.innerHTML = isDark ? SUN : MOON; });
+}
+
+renderBrands();
+renderHomeGrid();
+renderShopGrid();
+renderCartBadge();
+renderCartView();
+updateThemeIcons();
+</script>
+
+</body>
+</html>

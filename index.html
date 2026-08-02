@@ -156,6 +156,7 @@
   .bento-card .bc-icon-sm{ margin-bottom:12px; color:var(--gold-dark); }
   .bento-card .bc-icon-sm.yellow{ color:#8A6800; }
   .bento-card .bc-tag{ font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--gold); margin-top:10px; display:inline-block; }
+  .bento-card.tint{ background:linear-gradient(160deg,var(--gold-glow),var(--white) 60%); }
   @media(max-width:900px){ .bento{ grid-template-columns:1fr 1fr; } .bento-card.lg{ grid-column:span 2; grid-row:span 1; min-height:170px; } }
 
   /* ================= TRUST STRIP ================= */
@@ -167,6 +168,7 @@
   .trust-card h4{ font-size:13px; margin-bottom:2px; font-family:'Space Grotesk'; }
   .trust-card p{ font-size:11.5px; color:var(--muted); }
   @media(max-width:900px){ .trust-row{ grid-template-columns:repeat(2,1fr); padding:20px 16px; } }
+  @media(max-width:900px){ .brand-stripe{ display:none; } .trust-card{ gap:9px; } .trust-card .ic{ width:30px; height:30px; } .trust-card h4{ font-size:12px; } .trust-card p{ font-size:10.5px; } }
 
   /* ================= BRAND STRIPE BANNER ================= */
   .brand-stripe{ background:var(--gold); color:var(--ink); padding:10px 28px; overflow:hidden; }
@@ -176,7 +178,7 @@
   /* ================= PHOTO BANNER ================= */
   .photo-band{ position:relative; border-radius:var(--radius); overflow:hidden; min-height:380px; display:flex; align-items:flex-end; border:1px solid var(--line); }
   .photo-band img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 30%; }
-  .photo-band::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(11,15,20,.55) 0%, rgba(11,15,20,.1) 55%, rgba(11,15,20,0) 100%); }
+  .photo-band::after{ content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(11,15,20,.35) 0%, rgba(11,15,20,.05) 55%, rgba(11,15,20,0) 100%); }
   .photo-band .pb-content{ position:relative; margin:22px; padding:26px 28px; color:#fff; max-width:480px; background:rgba(11,15,20,.82); backdrop-filter:blur(6px); border-radius:12px; border:1px solid rgba(255,255,255,.08); }
   .photo-band .pb-badge{ display:inline-flex; align-items:center; gap:7px; background:var(--gold); color:var(--ink); font-family:'IBM Plex Mono'; font-size:11px; font-weight:700; padding:6px 12px; border-radius:7px; margin-bottom:14px; }
   .photo-band h2{ font-size:24px; margin-bottom:10px; color:#fff; }
@@ -184,10 +186,10 @@
   @media(max-width:700px){ .photo-band{ min-height:340px; } .photo-band .pb-content{ margin:14px; padding:20px; } .photo-band h2{ font-size:20px; } }
 
   /* ================= PHOTO CATEGORY TILE ================= */
-  .bento-card.photo{ position:relative; overflow:hidden; padding:0; color:#fff; display:flex; align-items:flex-end; }
+  .bento-card.photo{ position:relative; overflow:hidden; padding:0; color:#fff; }
   .bento-card.photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .bento-card.photo::after{ content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(6,9,14,.96) 0%, rgba(6,9,14,.72) 45%, rgba(6,9,14,.12) 100%); }
-  .bento-card.photo .pc-content{ position:relative; padding:20px; }
+  .bento-card.photo::after{ content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg, rgba(6,9,14,.6) 0%, rgba(6,9,14,.15) 45%, rgba(6,9,14,0) 100%); }
+  .bento-card.photo .pc-content{ position:absolute; left:14px; right:14px; bottom:14px; padding:14px 16px; background:rgba(6,9,14,.82); backdrop-filter:blur(4px); border-radius:10px; border:1px solid rgba(255,255,255,.08); }
   .bento-card.photo h3{ color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.5); }
   .bento-card.photo p{ color:#E4E7EC; text-shadow:0 1px 4px rgba(0,0,0,.5); }
   .bento-card.photo .bc-tag{ color:var(--gold); text-shadow:0 1px 4px rgba(0,0,0,.5); }
@@ -225,12 +227,18 @@
   /* ================= SHOP VIEW ================= */
   .shop-layout{ display:grid; grid-template-columns:230px 1fr; gap:26px; padding:24px 28px 60px; max-width:1320px; margin:0 auto; }
   @media(max-width:900px){ .shop-layout{ grid-template-columns:1fr; padding:16px 16px 40px; } }
-  .filters{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:20px; align-self:start; position:sticky; top:90px; }
+  .filters{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:8px 20px; align-self:start; position:sticky; top:90px; }
   @media(max-width:900px){ .filters{ position:static; } }
   .filters h4{ font-family:'Space Grotesk'; font-size:13px; margin-bottom:12px; }
-  .filters .fgroup{ margin-bottom:20px; }
+  .filters .fgroup{ margin-top:12px; }
   .filters .fgroup label{ display:flex; align-items:center; gap:8px; font-size:13px; padding:5px 0; cursor:pointer; }
   .filters .fgroup label:hover{ color:var(--gold-dark); }
+  .filter-group{ border-bottom:1px solid var(--line); padding:14px 0; }
+  .filter-group:last-of-type{ border-bottom:none; }
+  .filter-group summary{ font-family:'Space Grotesk'; font-size:13px; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  .filter-group summary::-webkit-details-marker{ display:none; }
+  .filter-group summary::after{ content:'\203A'; color:var(--muted); font-size:18px; transform:rotate(90deg); transition:transform .2s; }
+  .filter-group[open] summary::after{ transform:rotate(-90deg); }
   .shop-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px; }
   .shop-toolbar h2{ font-size:20px; font-weight:700; }
   .shop-toolbar select{ border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12.5px; background:var(--white); color:var(--text); }
@@ -434,9 +442,11 @@
           <span class="bc-tag">→ 4 líneas disponibles</span>
         </div>
       </div>
-      <div class="bento-card" onclick="showView('shop','Reflectivos')">
-        <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3 6 5v16h5v-8h2v8h5V5l-3-2-3 2-3-2Z"/></svg>
-        <h3>Ropa reflectiva</h3><p>Chalecos y polos alta visibilidad</p>
+      <div class="bento-card photo" onclick="showView('shop','Reflectivos')" style="min-height:170px;">
+        <img src="https://galusasrl.com.do/wp-content/uploads/2023/08/DSC1001_11zon-scaled.webp" alt="Ropa reflectiva Galusa Import">
+        <div class="pc-content">
+          <h3>Ropa reflectiva</h3><p>Chalecos y polos alta visibilidad</p>
+        </div>
       </div>
       <div class="bento-card photo" onclick="showView('shop','Vial')" style="min-height:170px;">
         <img src="https://galusasrl.com.do/wp-content/uploads/2022/06/Pesados-55-web.jpeg" alt="Seguridad vial Galusa Import">
@@ -444,11 +454,11 @@
           <h3>Seguridad vial</h3><p>Conos, boyas y barreras</p>
         </div>
       </div>
-      <div class="bento-card" onclick="showView('shop','Protección personal')">
+      <div class="bento-card tint" onclick="showView('shop','Protección personal')">
         <svg class="icon-lg bc-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5a1.5 1.5 0 0 1 3 0v8M17 12v-4a1.5 1.5 0 0 1 3 0v7c0 3.3-2.7 6-6 6h-2c-3 0-4.5-1.5-6-4l-2-4a1.4 1.4 0 0 1 2.4-1.4L8 13"/></svg>
         <h3>Protección personal</h3><p>Guantes, lentes y arneses</p>
       </div>
-      <div class="bento-card" onclick="showView('shop','Emergencia')">
+      <div class="bento-card tint" onclick="showView('shop','Emergencia')">
         <svg class="icon-lg bc-icon-sm yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="8" width="6" height="12" rx="2"/><path d="M12 8V5M10 5h4M9 11h6"/><circle cx="12" cy="3.2" r="1.1" fill="currentColor" stroke="none"/></svg>
         <h3>Emergencia</h3><p>Extintores certificados</p>
       </div>
@@ -473,27 +483,33 @@
   <div class="breadcrumb"><a onclick="showView('home')">Inicio</a> / <span id="shopCrumb">Tienda</span></div>
   <div class="shop-layout">
     <aside class="filters">
-      <h4>Categoría</h4>
-      <div class="fgroup" id="filterCats">
-        <label><input type="checkbox" value="all" checked onclick="filterShop('all')"> Todas</label>
-        <label><input type="checkbox" value="Calzado" onclick="filterShop('Calzado')"> Calzado de seguridad</label>
-        <label><input type="checkbox" value="Reflectivos" onclick="filterShop('Reflectivos')"> Ropa reflectiva</label>
-        <label><input type="checkbox" value="Vial" onclick="filterShop('Vial')"> Seguridad vial</label>
-        <label><input type="checkbox" value="Protección personal" onclick="filterShop('Protección personal')"> Protección personal</label>
-        <label><input type="checkbox" value="Emergencia" onclick="filterShop('Emergencia')"> Emergencia</label>
-      </div>
-      <h4>Precio</h4>
-      <div class="fgroup">
-        <label><input type="radio" name="price"> Menos de RD$500</label>
-        <label><input type="radio" name="price"> RD$500 – RD$2,000</label>
-        <label><input type="radio" name="price"> Más de RD$2,000</label>
-      </div>
-      <h4>Marca</h4>
-      <div class="fgroup">
-        <label><input type="checkbox"> JALT Safety</label>
-        <label><input type="checkbox"> YEGSA</label>
-        <label><input type="checkbox"> Ingco</label>
-      </div>
+      <details class="filter-group" open>
+        <summary>Categoría</summary>
+        <div class="fgroup" id="filterCats">
+          <label><input type="checkbox" value="all" checked onclick="filterShop('all')"> Todas</label>
+          <label><input type="checkbox" value="Calzado" onclick="filterShop('Calzado')"> Calzado de seguridad</label>
+          <label><input type="checkbox" value="Reflectivos" onclick="filterShop('Reflectivos')"> Ropa reflectiva</label>
+          <label><input type="checkbox" value="Vial" onclick="filterShop('Vial')"> Seguridad vial</label>
+          <label><input type="checkbox" value="Protección personal" onclick="filterShop('Protección personal')"> Protección personal</label>
+          <label><input type="checkbox" value="Emergencia" onclick="filterShop('Emergencia')"> Emergencia</label>
+        </div>
+      </details>
+      <details class="filter-group">
+        <summary>Precio</summary>
+        <div class="fgroup">
+          <label><input type="radio" name="price"> Menos de RD$500</label>
+          <label><input type="radio" name="price"> RD$500 – RD$2,000</label>
+          <label><input type="radio" name="price"> Más de RD$2,000</label>
+        </div>
+      </details>
+      <details class="filter-group">
+        <summary>Marca</summary>
+        <div class="fgroup">
+          <label><input type="checkbox"> JALT Safety</label>
+          <label><input type="checkbox"> YEGSA</label>
+          <label><input type="checkbox"> Ingco</label>
+        </div>
+      </details>
     </aside>
     <div>
       <div class="shop-toolbar">

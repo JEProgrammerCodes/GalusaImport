@@ -29,7 +29,7 @@
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   button, a, [onclick]{ cursor:pointer; }
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:auto;}
   body{ font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; transition:background .2s, color .2s; }
   h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em; }
   .mono{ font-family:'IBM Plex Mono',monospace; }
@@ -83,6 +83,20 @@
   .install-banner b{ color:var(--gold); }
   .install-banner button{ background:var(--gold); color:var(--ink); font-weight:700; font-size:11px; padding:5px 10px; border-radius:6px; }
   @media(max-width:900px){ header.app-bar{ display:flex; } .install-banner{ display:flex; } }
+
+  /* ================= MOBILE SEARCH BAR ================= */
+  .mobile-search{ display:none; background:var(--white); border-bottom:1px solid var(--line); padding:0 14px; max-height:0; overflow:hidden; transition:max-height .22s ease, padding .22s ease; }
+  .mobile-search.open{ max-height:80px; padding:10px 14px; }
+  .ms-field{ display:flex; align-items:center; gap:10px; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:10px 12px; color:var(--muted); }
+  .ms-field input{ flex:1; border:none; background:none; outline:none; font-size:14px; color:var(--text); }
+  .ms-field button{ color:var(--muted); display:flex; }
+  @media(max-width:900px){ .mobile-search{ display:block; } }
+
+  /* ================= EMPTY SEARCH STATE ================= */
+  .no-results{ grid-column:1 / -1; text-align:center; padding:60px 20px; color:var(--muted); }
+  .no-results .nr-icon{ margin:0 auto 14px; color:var(--line); }
+  .no-results h3{ font-size:16px; color:var(--text); margin-bottom:6px; }
+  .no-results p{ font-size:13.5px; margin-bottom:18px; }
 
   /* ================= BOTTOM TAB BAR ================= */
   .tabbar{
@@ -355,7 +369,7 @@
     </nav>
     <div class="hdr-search">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" placeholder="Buscar producto..." onkeydown="if(event.key==='Enter') showView('shop')">
+      <input type="text" id="searchDesktop" placeholder="Buscar producto..." oninput="runSearch(this.value)" onkeydown="if(event.key==='Enter') runSearch(this.value)">
     </div>
     <button class="icon-btn theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema"></button>
     <div class="cart-pill" onclick="showView('cart')">
@@ -376,7 +390,7 @@
 <header class="app-bar">
   <img class="logo-img" src="https://galusasrl.com.do/wp-content/uploads/2022/03/Galusa-LOGO-01-e1649691756343.png" alt="Galusa Import" onclick="showView('home')">
   <div class="ab-actions">
-    <button class="icon-btn" onclick="showView('shop')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+    <button class="icon-btn" onclick="toggleMobileSearch()" aria-label="Buscar"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
     <button class="icon-btn theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema"></button>
     <button class="icon-btn ab-icon" onclick="showView('cart')">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h8.4a2 2 0 0 0 2-1.6L21 8H6"/></svg>
@@ -384,6 +398,14 @@
     </button>
   </div>
 </header>
+
+<div class="mobile-search" id="mobileSearch">
+  <div class="ms-field">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input type="text" id="searchMobile" placeholder="Buscar producto..." oninput="runSearch(this.value)">
+    <button onclick="clearSearch()" aria-label="Cerrar b\u00fasqueda"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+</div>
 
 <!-- ===================== HOME ===================== -->
 <div class="view active" id="view-home">
@@ -401,7 +423,6 @@
         <div class="dash-card"><div class="dv">24h</div><div class="dl">Despacho en Santo Domingo</div></div>
       </div>
     </div>
-  </div>
   </div>
 
   <div class="brand-stripe">
@@ -779,6 +800,7 @@ const brandLogos = [
 
 let cart = [];
 let currentShopCat = 'all';
+let searchQuery = '';
 
 function money(n){ return 'RD$' + n.toLocaleString('es-DO'); }
 
@@ -821,15 +843,109 @@ function renderHomeGrid(){
   document.getElementById('homeGrid').innerHTML = featured.map(productCard).join('');
 }
 
+function normalize(s){
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function getShopList(){
+  let list = currentShopCat === 'all' ? products : products.filter(p => p.cat === currentShopCat);
+  if(searchQuery.trim()){
+    const q = normalize(searchQuery.trim());
+    const terms = q.split(/\s+/);
+    list = list.filter(p => {
+      const haystack = normalize(p.name + ' ' + p.cat + ' ' + Object.values(p.specs).join(' '));
+      return terms.every(t => haystack.includes(t));
+    });
+  }
+  return list;
+}
+
 function renderShopGrid(){
-  const list = currentShopCat === 'all' ? products : products.filter(p => p.cat === currentShopCat);
-  document.getElementById('shopGrid').innerHTML = list.map(productCard).join('');
-  document.getElementById('shopTitle').textContent = currentShopCat === 'all' ? `Todos los productos (${list.length})` : `${currentShopCat} (${list.length})`;
-  document.getElementById('shopCrumb').textContent = currentShopCat === 'all' ? 'Tienda' : currentShopCat;
+  const list = getShopList();
+  const grid = document.getElementById('shopGrid');
+
+  if(list.length === 0){
+    grid.innerHTML = `<div class="no-results">
+        <div class="nr-icon">${CART_LG}</div>
+        <h3>Sin resultados</h3>
+        <p>No encontramos productos que coincidan con tu búsqueda.</p>
+        <button class="btn btn-teal" onclick="clearSearch()">Ver todo el catálogo</button>
+      </div>`;
+  } else {
+    grid.innerHTML = list.map(productCard).join('');
+  }
+
+  let title;
+  if(searchQuery.trim()){
+    title = `Resultados para "${searchQuery.trim()}" (${list.length})`;
+  } else if(currentShopCat === 'all'){
+    title = `Todos los productos (${list.length})`;
+  } else {
+    title = `${currentShopCat} (${list.length})`;
+  }
+  document.getElementById('shopTitle').textContent = title;
+  document.getElementById('shopCrumb').textContent = searchQuery.trim() ? 'Búsqueda' : (currentShopCat === 'all' ? 'Tienda' : currentShopCat);
   document.querySelectorAll('#filterCats input').forEach(inp => { inp.checked = (inp.value === currentShopCat); });
 }
 
-function filterShop(cat){ currentShopCat = cat; renderShopGrid(); }
+function runSearch(value){
+  searchQuery = value;
+  const d = document.getElementById('searchDesktop');
+  const m = document.getElementById('searchMobile');
+  if(d && d.value !== value) d.value = value;
+  if(m && m.value !== value) m.value = value;
+
+  if(value.trim()){
+    currentShopCat = 'all';
+    if(!document.getElementById('view-shop').classList.contains('active')){
+      showView('shop', null, true);
+    } else {
+      renderShopGrid();
+    }
+  } else {
+    renderShopGrid();
+  }
+}
+
+function clearSearchFields(){
+  searchQuery = '';
+  const d = document.getElementById('searchDesktop');
+  const m = document.getElementById('searchMobile');
+  if(d) d.value = '';
+  if(m) m.value = '';
+}
+
+function clearSearch(){
+  searchQuery = '';
+  const d = document.getElementById('searchDesktop');
+  const m = document.getElementById('searchMobile');
+  if(d) d.value = '';
+  if(m) m.value = '';
+  const bar = document.getElementById('mobileSearch');
+  if(bar) bar.classList.remove('open');
+  renderShopGrid();
+}
+
+function toggleMobileSearch(){
+  const bar = document.getElementById('mobileSearch');
+  const isOpen = bar.classList.toggle('open');
+  if(isOpen){
+    setTimeout(()=> document.getElementById('searchMobile').focus(), 120);
+  }
+}
+
+function filterShop(cat){
+  if(currentShopCat === cat && cat !== 'all'){ cat = 'all'; }
+  currentShopCat = cat;
+  searchQuery = '';
+  const d = document.getElementById('searchDesktop');
+  const m = document.getElementById('searchMobile');
+  if(d) d.value = '';
+  if(m) m.value = '';
+  renderShopGrid();
+  const grid = document.getElementById('shopGrid');
+  if(grid){ grid.scrollIntoView({block:'start', behavior:'auto'}); }
+}
 
 function openProduct(id){
   const p = products.find(x => x.id === id);
@@ -864,7 +980,7 @@ function openProduct(id){
         </div>
       </div>
       <button class="btn btn-teal btn-block" onclick="addToCart(${p.id}, this, event, true)">Añadir al carrito</button>
-      <button class="btn btn-ghost btn-block" style="color:#fff;border-color:rgba(255,255,255,.25);" onclick="addToCart(${p.id}, this, event); showView('cart')">Comprar ahora</button>
+      <button class="btn btn-ghost btn-block" style="color:#fff;border-color:rgba(255,255,255,.25);" onclick="addToCart(${p.id}, null, event, true); showView('cart')">Comprar ahora</button>
     </div>
   `;
   const related = products.filter(x => x.cat === p.cat && x.id !== p.id).slice(0,4);
@@ -978,12 +1094,21 @@ function showToast(msg){
 }
 
 function showView(name, cat, skipCatReset){
+  if(name !== 'shop'){
+    const bar = document.getElementById('mobileSearch');
+    if(bar) bar.classList.remove('open');
+  }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
-  if(name === 'shop' && cat && !skipCatReset){ currentShopCat = cat; }
+  if(name === 'shop' && cat && !skipCatReset){ currentShopCat = cat; clearSearchFields(); }
   if(name === 'shop'){ renderShopGrid(); }
   document.querySelectorAll('.tab-btn').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  if(name === 'shop'){
+    const grid = document.getElementById('shopGrid');
+    if(grid){ grid.scrollIntoView({block:'start', behavior:'auto'}); } else { window.scrollTo(0,0); }
+  } else {
+    window.scrollTo(0, 0);
+  }
 }
 
 function toggleTheme(){
